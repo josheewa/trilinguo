@@ -40,20 +40,38 @@ const FrenchResponseSchema = z.object({
   culturalContext: z.string().nullable(),
 })
 
-// Schema mapping
-const getResponseSchema = (languageCode) => {
+// Flexible schema that supports both standard and English-only responses
+const FlexibleResponseSchema = (languageCode) => {
+  const characterSchema = z.object({
+    text: z.string(),
+    romanization: z.string(),
+  })
+
+  const baseFields = {
+    text: z.string().nullable(),
+    english: z.string().nullable(),
+    culturalContext: z.string().nullable(),
+  }
+
+  const romanizedLanguageSchema = z.object({
+    characters: z.array(characterSchema).nullable(),
+    ...baseFields,
+  })
+
   switch (languageCode) {
     case 'zh-tw':
     case 'zh-cn':
-      return ChineseResponseSchema
     case 'ja':
-      return JapaneseResponseSchema
     case 'ko':
-      return KoreanResponseSchema
+      return romanizedLanguageSchema
     case 'fr':
-      return FrenchResponseSchema
+      return z.object({
+        text: z.string(),
+        english: z.string().nullable(),
+        culturalContext: z.string().nullable(),
+      })
     default:
-      return ChineseResponseSchema
+      return romanizedLanguageSchema
   }
 }
 
@@ -114,6 +132,8 @@ CRITICAL BEHAVIORAL RULES:
    - "How do you say [text] in ${config.languageName}?"
    - "What does [text] mean in English?"
    - "Translate [text] to ${config.languageName}"
+   - "What does [${config.languageName} text] mean?"
+   For ${config.languageName}-to-English translations, use the English-only format
 3. CONVERSATION MODE (default): For ALL other inputs, respond naturally to their question/statement in ${config.languageName}
 
 CONVERSATION GUIDELINES:
@@ -133,9 +153,10 @@ ${hasRomanization ? `- Break down your ${config.languageName} responses characte
 </instructions>
 
 <format>
-${hasRomanization ? `
-All responses must follow this format for languages with romanization:
-{
+You have TWO format options - choose the appropriate one based on the response type:
+
+OPTION 1 - Standard ${config.languageName} Response (for conversations):
+${hasRomanization ? `{
   "characters": [
     {
       "text": "string",
@@ -150,17 +171,32 @@ All responses must follow this format for languages with romanization:
 - ${config.romanizationName.charAt(0).toUpperCase() + config.romanizationName.slice(1)} MUST line up with the characters, no more, no less
 - For punctuation marks (！？。，), include them directly with the preceding character instead of as separate entries
 - Keep responses natural and flowing, not overly segmented
-` : `
-All responses must follow this format for languages without romanization:
-{
+- Include "english" field with translation` : `{
   "text": "string",
   "english": "string", 
   "culturalContext": "string or null"
 }
-`}
-- English translation should be natural and conversational
+- Include "english" field with translation`}
+
+OPTION 2 - English-Only Response (for translations to English):
+${hasRomanization ? `{
+  "characters": null,
+  "text": "string",
+  "english": null,
+  "culturalContext": "string or null"
+}` : `{
+  "text": "string",
+  "english": null,
+  "culturalContext": "string or null"
+}`}
+- Use this format when translating ${config.languageName} to English
+- Provide the English translation/explanation directly in the "text" field
+- Set ${hasRomanization ? '"characters" and "english"' : '"english"'} fields to null
+
+GENERAL RULES:
 - culturalContext should explain cultural nuances, slang meanings, or cultural references when relevant
 - Set culturalContext to null if there are no meaningful cultural insights to share, otherwise provide a helpful cultural explanation
+- Choose Option 1 for conversations in ${config.languageName}, Option 2 for translations to English
 </format>
 `
 }
@@ -173,7 +209,7 @@ export default async function POST(req, res) {
       return NextResponse.json({ error: 'Personality data is required' }, { status: 400 })
     }
 
-    const responseSchema = getResponseSchema(language)
+    const responseSchema = FlexibleResponseSchema(language)
     const systemPrompt = createSystemPrompt(language, personality)
     const responseFormat = zodResponseFormat(responseSchema, 'response')
 
@@ -211,3 +247,4 @@ export default async function POST(req, res) {
     }, { status: 500 })
   }
 }
+

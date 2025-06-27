@@ -40,6 +40,17 @@ const STARTER_GENERATION_PROMPTS = {
   }
 }
 
+// Translation-focused fallback starters
+const getTranslationFocusedFallbacks = (count) => {
+  const fallbacks = [
+    "How do I say 'hello'?",
+    "Translate: I'm hungry",
+    "What does this word mean?",
+    "How do you pronounce this?"
+  ]
+  return fallbacks.slice(0, count)
+}
+
 export default async function POST(req, res) {
   try {
     const { language = 'zh-tw', count = 4 } = await req.json()
@@ -77,7 +88,7 @@ Return exactly ${count} starters in the required JSON format.`
       ],
       response_format: responseFormat,
       max_tokens: 300,
-      temperature: 0.8  // Slightly lower for more consistent translation-focused results
+      temperature: 0.8
     })
 
     const assistantOutput = response.choices[0].message.content.trim()
@@ -97,16 +108,8 @@ Return exactly ${count} starters in the required JSON format.`
   } catch (error) {
     console.error('Conversation Starters API Error:', error)
     
-    // Translation-focused fallback starters
-    const translationFallbacks = [
-      "How do I say 'hello'?",
-      "Translate: I'm hungry",
-      "What does this word mean?",
-      "How do you pronounce this?"
-    ]
-    
     return NextResponse.json({ 
-      starters: translationFallbacks.slice(0, 4) 
+      starters: getTranslationFocusedFallbacks(4) 
     })
   }
 } 
