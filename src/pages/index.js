@@ -199,11 +199,17 @@ export default function Home() {
   const languageDropdownRef = useRef(null)
   const mobileMenuRef = useRef(null)
   const inputRef = useRef(null)
+  const messagesEndRef = useRef(null)
 
   // Derived state
   const currentLanguage = LANGUAGES[settings.currentLanguage]
   const showEnglish = settings.showEnglish
   const showRomanization = settings.showRomanization && currentLanguage.hasRomanization
+
+  // Scroll to bottom of chat
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
 
   // UI state helpers
   const updateUiState = useCallback((updates) => {
@@ -237,6 +243,13 @@ export default function Home() {
     setSettings(loadedSettings)
     setMessages(loadChatHistory(loadedSettings.currentLanguage))
   }, [])
+
+  // Scroll when new messages are added or typing indicator appears
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(scrollToBottom, 100)
+    }
+  }, [messages, uiState.isLoading, scrollToBottom])
 
   // Load conversation starters
   const loadConversationStarters = useCallback(async (force = false) => {
@@ -352,7 +365,7 @@ export default function Home() {
     const timeoutId = setTimeout(fetchSuggestions, 300)
 
     return () => clearTimeout(timeoutId)
-  }, [input, settings.currentLanguage, settings.enablePredictiveText, messages, isFetchingSuggestions])
+  }, [input, settings.currentLanguage, settings.enablePredictiveText, messages])
 
   // Handle language switching
   const handleLanguageChange = (languageCode) => {
@@ -472,6 +485,12 @@ export default function Home() {
 
     updateUiState({ isLoading: true })
     
+    const createErrorMessage = (text) => ({
+      role: 'assistant',
+      content: { text, english: text },
+      isError: true,
+    })
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -483,12 +502,6 @@ export default function Home() {
         }),
       })
       const data = await response.json()
-
-      const createErrorMessage = (text) => ({
-        role: 'assistant',
-        content: { text, english: text },
-        isError: true,
-      })
 
       if (data.error) {
         console.error('API Error:', data.error)
@@ -512,11 +525,12 @@ export default function Home() {
       <Head>
         <title>Trilinguo</title>
         <meta name="description" content="Trilinguo is a chat duolingo app." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, interactive-widget=resizes-content" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </Head>
 
       {/* Main App Container */}
-      <div className={`${inter.className} flex flex-col h-screen relative text-white overflow-hidden`}>
+      <div className={`${inter.className} flex flex-col h-[100dvh] relative text-white overflow-hidden`}>
         {/* Liquid Glass Background */}
         <div className={`absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 transition-all duration-300 ${
           uiState.showMobileMenu ? 'blur-sm' : ''
@@ -620,7 +634,7 @@ export default function Home() {
             {/* Settings Menu Button - Both Desktop and Mobile */}
             <button
               onClick={() => updateUiState({ showMobileMenu: true })}
-              className="flex items-center space-x-2 p-2 rounded-xl backdrop-blur-sm bg-white/10 hover:bg-white/20 border border-white/20 transition-all duration-200 shadow-lg cursor-pointer">
+              className="flex items-center sm:space-x-2 p-2 rounded-xl backdrop-blur-sm bg-white/10 hover:bg-white/20 border border-white/20 transition-all duration-200 shadow-lg cursor-pointer">
               <svg
                 className="w-4 h-4 text-gray-300"
                 fill="none"
@@ -736,19 +750,19 @@ export default function Home() {
                         </svg>
                         Clear Chat History
                       </div>
-                    </button>
-                  )}
+                                          </button>
+                    )}
                 </div>
               </div>
-            </div>
           </div>
+        </div>
 
         {/* Chat Container */}
-        <div className={`relative flex-1 flex flex-col max-w-4xl mx-auto w-full z-10 transition-all duration-300 ${
+        <div className={`relative flex-1 flex flex-col max-w-4xl mx-auto w-full z-10 min-h-0 transition-all duration-300 ${
           uiState.showMobileMenu ? 'blur-sm' : ''
         }`}>
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4">
+          <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4 min-h-0">
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center px-4">
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-3 sm:mb-4">
@@ -814,7 +828,7 @@ export default function Home() {
                     )}
 
                     <div
-                      className={`max-w-[85%] sm:max-w-xs lg:max-w-md px-4 py-3 relative backdrop-blur-xl border shadow-lg ${
+                      className={`max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative backdrop-blur-xl border shadow-lg ${
                         message.role === 'user'
                           ? 'bg-gradient-to-br from-blue-500/90 to-blue-600/90 text-white border-blue-400/30 rounded-[20px_20px_4px_20px]'
                           : 'bg-white/10 text-white border-white/20 rounded-[20px_20px_20px_4px]'
@@ -865,7 +879,7 @@ export default function Home() {
 
                           {/* Check if message content exists */}
                           {!message.content ? (
-                            <span className="text-lg sm:text-xl font-medium text-red-400">
+                            <span className="text-base sm:text-lg font-medium text-red-400">
                               [Message content missing]
                             </span>
                           ) : (
@@ -893,7 +907,7 @@ export default function Home() {
                                             {obj.romanization || obj.pinyin}
                                           </span>
                                         )}
-                                      <span className="text-lg sm:text-xl font-medium leading-none">
+                                      <span className="text-base sm:text-lg font-medium leading-none">
                                         {obj.text || ''}
                                       </span>
                                     </div>
@@ -915,19 +929,19 @@ export default function Home() {
                                           {obj.pinyin}
                                         </span>
                                       )}
-                                      <span className="text-lg sm:text-xl font-medium leading-none">
+                                      <span className="text-base sm:text-lg font-medium leading-none">
                                         {obj.text || ''}
                                       </span>
                                     </div>
                                   ))
                                 ) : message.content && message.content.text ? (
                                   /* Plain text format (e.g., French) */
-                                  <span className="text-lg sm:text-xl font-medium leading-relaxed">
+                                  <span className="text-base sm:text-lg font-medium leading-relaxed">
                                     {message.content.text}
                                   </span>
                                 ) : (
                                   /* Fallback for unknown formats */
-                                  <span className="text-lg sm:text-xl font-medium text-red-400 leading-relaxed">
+                                  <span className="text-base sm:text-lg font-medium text-red-400 leading-relaxed">
                                     [Error displaying message]
                                   </span>
                                 )}
@@ -1028,12 +1042,13 @@ export default function Home() {
                     </div>
                   </div>
                 )}
+                <div ref={messagesEndRef} />
               </>
             )}
           </div>
 
           {/* Input Area */}
-          <div className="relative px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex-shrink-0 px-3 sm:px-4 pt-3" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
             {/* Predictive Text Suggestions */}
             {settings.enablePredictiveText &&
               suggestions.length > 0 &&
