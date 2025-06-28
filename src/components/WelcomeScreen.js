@@ -14,7 +14,7 @@ export default function WelcomeScreen({
       <h2 className="text-lg sm:text-xl font-semibold text-gray-300 mb-2">
         Welcome to Trilinguo
       </h2>
-      <p className="text-sm sm:text-base text-gray-500 max-w-md mb-6">
+      <p className="text-sm sm:text-base text-gray-200 max-w-md mb-6">
         Start a conversation to practice {currentLanguage.name} with{' '}
         {currentLanguage.personality.name}.
         {currentLanguage.hasRomanization &&
@@ -23,7 +23,7 @@ export default function WelcomeScreen({
 
       {/* Conversation Starters */}
       <div className="w-full max-w-md">
-        <h3 className="text-sm font-medium text-gray-400 mb-3">Suggested prompts</h3>
+        <h3 className="text-sm font-medium text-gray-200 mb-3">Suggested prompts</h3>
         {loadingStarters ? (
           <div className="grid grid-cols-1 gap-3">
             {[...Array(4)].map((_, index) => (

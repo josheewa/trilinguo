@@ -53,7 +53,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
     </div>
     <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-assistant text-white rounded-[20px_20px_20px_4px]">
       <div className="space-y-2 sm:space-y-3">
-        <div className="text-xs text-gray-400 font-medium">{currentLanguage.personality.name}</div>
+        <div className="text-xs text-gray-200 font-medium">{currentLanguage.personality.name}</div>
         {!message.content ? (
           <span className="text-base sm:text-lg font-medium text-red-400">[Message content missing]</span>
         ) : (
@@ -70,7 +70,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
                     }
                   >
                     {(obj.romanization || obj.pinyin) && showRomanization && obj.text.trim() && (
-                      <span className="text-xs text-gray-400 mb-0.5 font-mono leading-none text-center whitespace-nowrap">
+                      <span className="text-xs text-gray-200 mb-0.5 font-mono leading-none text-center whitespace-nowrap">
                         {obj.romanization || obj.pinyin}
                       </span>
                     )}
@@ -123,7 +123,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
             {message.content.culturalContext && (
               <button
                 onClick={() => updateUiState({ culturalContextModal: message.content.culturalContext })}
-                className="inline-flex items-center text-xs text-gray-400 hover:text-blue-400 transition-colors cursor-pointer"
+                className="inline-flex items-center text-xs text-gray-200 hover:text-blue-400 transition-colors cursor-pointer"
               >
                 <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path

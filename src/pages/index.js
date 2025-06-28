@@ -476,6 +476,9 @@ export default function Home() {
           handleLanguageChange={handleLanguageChange}
           handleClearChat={handleClearChat}
           messages={messages}
+          currentLanguage={currentLanguage}
+          showRomanization={showRomanization}
+          showEnglish={showEnglish}
         />
 
         {/* Chat Content - Scrollable */}

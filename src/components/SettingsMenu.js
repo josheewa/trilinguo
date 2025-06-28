@@ -10,6 +10,9 @@ export default function SettingsMenu({
   handleLanguageChange,
   handleClearChat,
   messages,
+  currentLanguage,
+  showRomanization,
+  showEnglish,
 }) {
   return (
     <div
@@ -23,8 +26,8 @@ export default function SettingsMenu({
       ></div>
       <div
         ref={mobileMenuRef}
-        className={`fixed right-0 top-0 h-full w-80 max-w-[90vw] glass-panel border-l border-white/30 transition-transform duration-300 ease-out z-[101] ${
-          uiState.showMobileMenu ? 'translate-x-0' : 'translate-x-full'
+        className={`h-full w-80 max-w-[90vw] glass-panel border-l border-white/30 transition-transform duration-500 ease-in-out z-[101] ${
+          uiState.showMobileMenu ? 'settings-panel-open' : 'settings-panel-closed'
         }`}
       >
         <div className="p-4 border-b border-white/20">
@@ -61,7 +64,7 @@ export default function SettingsMenu({
                 onClick={() => handleLanguageChange(lang.code)}
                 className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 cursor-pointer ${
                   settings.currentLanguage === lang.code
-                    ? 'glass-button-primary text-white'
+                    ? 'glass-button-selected text-white'
                     : 'glass-button text-gray-300'
                 }`}
               >
@@ -78,6 +81,58 @@ export default function SettingsMenu({
         <div className="p-4 border-t border-white/20">
           <h3 className="text-sm font-medium text-gray-300 mb-3">Settings</h3>
           <div className="space-y-3">
+            {/* English Toggle */}
+            <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3">
+              <span className="text-sm text-gray-200 font-medium">Show English</span>
+              <button
+                onClick={() => updateSettings({ showEnglish: !showEnglish })}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 cursor-pointer ${
+                  showEnglish
+                    ? 'glass-toggle-active'
+                    : 'glass-toggle-inactive-contrast'
+                }`}
+                role="switch"
+                aria-checked={showEnglish}
+              >
+                <span className="sr-only">Show English translations</span>
+                <span
+                  className={`${
+                    showEnglish ? 'translate-x-6' : 'translate-x-1'
+                  } inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 shadow-lg ring-0`}
+                />
+              </button>
+            </label>
+
+            {/* Romanization Toggle - only show if current language supports it */}
+            {currentLanguage.hasRomanization && (
+              <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3">
+                <span className="text-sm text-gray-200 font-medium">
+                  Show {currentLanguage.romanizationName === 'pinyin' ? 'Pinyin 拼音' : 
+                        currentLanguage.romanizationName === 'romaji' ? 'Romaji ローマ字' :
+                        currentLanguage.romanizationName === 'romanization' ? 'Romanization 로마자' :
+                        currentLanguage.romanizationLabel}
+                </span>
+                <button
+                  onClick={() => updateSettings({ showRomanization: !showRomanization })}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 cursor-pointer ${
+                    showRomanization
+                      ? 'glass-toggle-active'
+                      : 'glass-toggle-inactive-contrast'
+                  }`}
+                  role="switch"
+                  aria-checked={showRomanization}
+                >
+                  <span className="sr-only">Show romanization</span>
+                  <span
+                    className={`${
+                      showRomanization ? 'translate-x-6' : 'translate-x-1'
+                    } inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 shadow-lg ring-0`}
+                  />
+                </button>
+              </label>
+            )}
+
+            {/* Predictive Text Toggle */}
             <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3">
               <span className="text-sm text-gray-200 font-medium">Predictive Text</span>
               <button
@@ -87,7 +142,7 @@ export default function SettingsMenu({
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 cursor-pointer ${
                   settings.enablePredictiveText
                     ? 'glass-toggle-active'
-                    : 'glass-toggle-inactive'
+                    : 'glass-toggle-inactive-contrast'
                 }`}
                 role="switch"
                 aria-checked={settings.enablePredictiveText}
