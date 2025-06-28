@@ -1,4 +1,3 @@
-import { Inter } from 'next/font/google'
 import Head from 'next/head'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { LANGUAGES } from '../config/languages'
@@ -19,10 +18,6 @@ import WelcomeScreen from '../components/WelcomeScreen'
 import ChatHistory from '../components/ChatHistory'
 import CulturalContextPanel from '../components/CulturalContextPanel'
 import ClearChatModal from '../components/ClearChatModal'
-
-const inter = Inter({
-  subsets: ['latin'],
-})
 
 // Future regional variants to implement later
 // TODO: Add regional toggles for:
@@ -190,6 +185,25 @@ export default function Home() {
       document.removeEventListener('keydown', handleEscapeKey)
     }
   }, [updateUiState, closeAllDropdowns])
+
+  // Mouse tracking for glass hover effects
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const glassElements = document.querySelectorAll('.glass-surface, .glass-button, .glass-card, .glass-dropdown, .glass-modal, .glass-surface-subtle, .glass-panel')
+      
+      glassElements.forEach((element) => {
+        const rect = element.getBoundingClientRect()
+        const x = ((e.clientX - rect.left) / rect.width) * 100
+        const y = ((e.clientY - rect.top) / rect.height) * 100
+        
+        element.style.setProperty('--mouse-x', `${x}%`)
+        element.style.setProperty('--mouse-y', `${y}%`)
+      })
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    return () => document.removeEventListener('mousemove', handleMouseMove)
+  }, [])
 
   // Predictive text fetching and management logic
   const fetchSuggestions = useCallback(async () => {
@@ -429,7 +443,7 @@ export default function Home() {
       
 
       {/* Main App Container - Pure Tailwind */}
-      <div className={`${inter.className} app h-dvh flex flex-col overflow-hidden overscroll-none text-white`}>
+      <div className="app h-dvh flex flex-col overflow-hidden overscroll-none text-white">
         {/* Background */}
         <div className={`absolute inset-0 liquid-bg-primary ${uiState.showMobileMenu ? 'blur-sm' : ''}`}>
           <div className="liquid-bg-overlay absolute inset-0"></div>

@@ -33,24 +33,33 @@ export default function Header({
             </svg>
           </button>
 
+          {/* Dropdown positioned absolutely outside layout flow */}
           {uiState.showLanguageDropdown && (
-            <div className="absolute top-full left-0 mt-2 w-64 glass-dropdown rounded-xl z-[50]">
-              {Object.values(LANGUAGES).map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => handleLanguageChange(lang.code)}
-                  className={`w-full text-left px-5 py-3 hover:bg-white/20 transition-all duration-200 first:rounded-t-xl last:rounded-b-xl cursor-pointer ${
-                    currentLanguage.code === lang.code
-                      ? 'bg-white/20 text-blue-300'
-                      : 'text-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="whitespace-nowrap">{lang.name}</span>
-                    <span className="text-xs text-gray-400 whitespace-nowrap">{lang.displayName}</span>
-                  </div>
-                </button>
-              ))}
+            <div className="fixed top-0 left-0 w-full h-full z-[50] pointer-events-none">
+              <div 
+                className="absolute w-64 glass-dropdown rounded-xl pointer-events-auto"
+                style={{
+                  top: `${languageDropdownRef.current?.getBoundingClientRect().bottom + 8}px`,
+                  left: `${languageDropdownRef.current?.getBoundingClientRect().left}px`
+                }}
+              >
+                {Object.values(LANGUAGES).map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => handleLanguageChange(lang.code)}
+                    className={`w-full text-left px-5 py-3 hover:bg-white/20 transition-all duration-200 first:rounded-t-xl last:rounded-b-xl cursor-pointer ${
+                      currentLanguage.code === lang.code
+                        ? 'bg-white/20 text-blue-300'
+                        : 'text-gray-200'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="whitespace-nowrap">{lang.name}</span>
+                      <span className="text-xs text-gray-400 whitespace-nowrap">{lang.displayName}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
