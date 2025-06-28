@@ -119,6 +119,8 @@ export default function Home() {
     setMessages(loadChatHistory(loadedSettings.currentLanguage))
   }, [])
 
+
+
   // Scroll when new messages are added or typing indicator appears
   useEffect(() => {
     if (messages.length > 0) {
@@ -382,23 +384,36 @@ export default function Home() {
 
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center justify-center h-screen bg-slate-900">
+      <div className="flex items-center justify-center h-screen liquid-bg-primary">
+        {/* Liquid Glass Background Effects */}
+        <div className="absolute inset-0">
+          <div className="liquid-bg-overlay absolute inset-0"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 liquid-orb-blue liquid-pulse-1"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 liquid-orb-purple liquid-pulse-2"></div>
+        </div>
+        
         <form
           onSubmit={handlePasswordSubmit}
-          className="p-8 bg-white/10 rounded-2xl shadow-2xl backdrop-blur-lg border border-white/20 w-full max-w-sm"
+          className="relative z-10 p-8 glass-card rounded-2xl w-full max-w-sm liquid-float"
         >
-          <h2 className="text-xl text-white font-semibold mb-4 text-center">Enter Access Code</h2>
+          <div className="text-center mb-6">
+            <div className="w-12 h-12 glass-button-primary rounded-full flex items-center justify-center mx-auto mb-3">
+              <span className="text-white font-bold text-xl">T</span>
+            </div>
+            <h2 className="text-xl text-white font-semibold">Enter Access Code</h2>
+          </div>
+          
           <input
             type="password"
             value={passwordInput}
             onChange={(e) => setPasswordInput(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg bg-black/20 text-white placeholder-gray-400 border border-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-3 rounded-xl glass-input text-white placeholder-gray-400 focus:outline-none"
             placeholder="Password"
             autoFocus
           />
           <button
             type="submit"
-            className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="w-full mt-4 px-4 py-3 glass-button-primary text-white rounded-xl font-medium"
           >
             Enter
           </button>
@@ -407,39 +422,36 @@ export default function Home() {
     )
   }
 
+  
+
   return (
     <>
-      <Head>
-        <title>Trilinguo</title>
-        <meta name="description" content="Trilinguo is a chat duolingo app." />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, interactive-widget=resizes-content"
-        />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      </Head>
+      
 
-      {/* Main App Container */}
-      <div className={`${inter.className} flex flex-col h-[100dvh] relative text-white overflow-hidden`}>
-        {/* Liquid Glass Background */}
-        <div className={`absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 transition-all duration-300 ${uiState.showMobileMenu ? 'blur-sm' : ''}`}>
-          <div className="absolute inset-0 bg-gradient-to-tl from-blue-500/10 via-purple-500/5 to-transparent"></div>
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+      {/* Main App Container - Pure Tailwind */}
+      <div className={`${inter.className} app h-dvh flex flex-col overflow-hidden overscroll-none text-white`}>
+        {/* Background */}
+        <div className={`absolute inset-0 liquid-bg-primary ${uiState.showMobileMenu ? 'blur-sm' : ''}`}>
+          <div className="liquid-bg-overlay absolute inset-0"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 liquid-orb-blue"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 liquid-orb-purple"></div>
         </div>
 
-        <Header
-          currentLanguage={currentLanguage}
-          showRomanization={showRomanization}
-          showEnglish={showEnglish}
-          messages={messages}
-          uiState={uiState}
-          updateUiState={updateUiState}
-          updateSettings={updateSettings}
-          handleClearChat={handleClearChat}
-          handleLanguageChange={handleLanguageChange}
-          languageDropdownRef={languageDropdownRef}
-        />
+        {/* Header - Fixed at top */}
+        <div className="sticky top-0 z-20 flex-shrink-0">
+          <Header
+            currentLanguage={currentLanguage}
+            showRomanization={showRomanization}
+            showEnglish={showEnglish}
+            messages={messages}
+            uiState={uiState}
+            updateUiState={updateUiState}
+            updateSettings={updateSettings}
+            handleClearChat={handleClearChat}
+            handleLanguageChange={handleLanguageChange}
+            languageDropdownRef={languageDropdownRef}
+          />
+        </div>
 
         <SettingsMenu
           uiState={uiState}
@@ -452,31 +464,31 @@ export default function Home() {
           messages={messages}
         />
 
-        {/* Chat Container */}
-        <div className={`relative flex-1 flex flex-col max-w-4xl mx-auto w-full z-10 min-h-0 transition-all duration-300 ${uiState.showMobileMenu ? 'blur-sm' : ''}`}>
-          {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4 min-h-0">
-            {messages.length === 0 ? (
-              <WelcomeScreen
-                currentLanguage={currentLanguage}
-                loadingStarters={loadingStarters}
-                conversationStarters={conversationStarters}
-                handleStarterClick={handleStarterClick}
-              />
-            ) : (
-              <ChatHistory
-                messages={messages}
-                uiState={uiState}
-                currentLanguage={currentLanguage}
-                showRomanization={showRomanization}
-                showEnglish={showEnglish}
-                handleSubmit={handleSubmit}
-                updateUiState={updateUiState}
-                messagesEndRef={messagesEndRef}
-              />
-            )}
-          </div>
+        {/* Chat Content - Scrollable */}
+        <div className={`flex-1 overflow-y-auto overscroll-contain px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4 relative z-10 max-w-4xl mx-auto w-full ${uiState.showMobileMenu ? 'blur-sm' : ''}`}>
+          {messages.length === 0 ? (
+            <WelcomeScreen
+              currentLanguage={currentLanguage}
+              loadingStarters={loadingStarters}
+              conversationStarters={conversationStarters}
+              handleStarterClick={handleStarterClick}
+            />
+          ) : (
+            <ChatHistory
+              messages={messages}
+              uiState={uiState}
+              currentLanguage={currentLanguage}
+              showRomanization={showRomanization}
+              showEnglish={showEnglish}
+              handleSubmit={handleSubmit}
+              updateUiState={updateUiState}
+              messagesEndRef={messagesEndRef}
+            />
+          )}
+        </div>
 
+        {/* Input - Fixed at bottom */}
+        <div className="sticky bottom-0 z-20 flex-shrink-0">
           <ChatInput
             settings={settings}
             suggestions={suggestions}
@@ -500,6 +512,7 @@ export default function Home() {
         onConfirm={confirmClearChat}
         currentLanguageName={currentLanguage.name}
       />
+      <footer className="footer"></footer>
     </>
   )
 }

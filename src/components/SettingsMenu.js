@@ -18,21 +18,21 @@ export default function SettingsMenu({
       }`}
     >
       <div
-        className="fixed inset-0 bg-black/50"
+        className="glass-overlay fixed inset-0"
         onClick={() => updateUiState({ showMobileMenu: false })}
       ></div>
       <div
         ref={mobileMenuRef}
-        className={`fixed right-0 top-0 h-full w-80 max-w-[90vw] backdrop-blur-xl bg-gradient-to-b from-white/20 via-white/15 to-white/10 border-l border-white/30 shadow-2xl transition-transform duration-300 ease-out z-[101] ${
+        className={`fixed right-0 top-0 h-full w-80 max-w-[90vw] glass-panel border-l border-white/30 transition-transform duration-300 ease-out z-[101] ${
           uiState.showMobileMenu ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="p-4 border-b border-white/20 backdrop-blur-sm">
+        <div className="p-4 border-b border-white/20">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-white">Settings</h2>
             <button
               onClick={() => updateUiState({ showMobileMenu: false })}
-              className="p-2 rounded-xl hover:bg-white/20 transition-all duration-200 backdrop-blur-sm border border-white/10 hover:border-white/30 cursor-pointer"
+              className="glass-button p-2 rounded-xl cursor-pointer"
             >
               <svg
                 className="w-4 h-4 text-gray-300 hover:text-white"
@@ -59,10 +59,10 @@ export default function SettingsMenu({
               <button
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
-                className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 backdrop-blur-sm border shadow-lg cursor-pointer ${
+                className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 cursor-pointer ${
                   settings.currentLanguage === lang.code
-                    ? 'bg-gradient-to-r from-blue-500/80 to-cyan-500/80 text-white border-blue-400/50 shadow-blue-500/25'
-                    : 'bg-white/10 text-gray-300 hover:bg-white/20 border-white/20 hover:border-white/30'
+                    ? 'glass-button-primary text-white'
+                    : 'glass-button text-gray-300'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -78,16 +78,16 @@ export default function SettingsMenu({
         <div className="p-4 border-t border-white/20">
           <h3 className="text-sm font-medium text-gray-300 mb-3">Settings</h3>
           <div className="space-y-3">
-            <label className="flex items-center justify-between backdrop-blur-sm bg-white/5 rounded-xl border border-white/10 p-3">
+            <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3">
               <span className="text-sm text-gray-200 font-medium">Predictive Text</span>
               <button
                 onClick={() =>
                   updateSettings({ enablePredictiveText: !settings.enablePredictiveText })
                 }
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 backdrop-blur-sm border shadow-lg cursor-pointer ${
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 cursor-pointer ${
                   settings.enablePredictiveText
-                    ? 'bg-gradient-to-r from-emerald-500/90 to-emerald-600/90 border-emerald-400/50 shadow-emerald-500/25'
-                    : 'bg-white/20 border-white/30 hover:bg-white/30'
+                    ? 'glass-toggle-active'
+                    : 'glass-toggle-inactive'
                 }`}
                 role="switch"
                 aria-checked={settings.enablePredictiveText}
@@ -104,7 +104,7 @@ export default function SettingsMenu({
             {messages.length > 0 && (
               <button
                 onClick={handleClearChat}
-                className="w-full text-left px-4 py-3 rounded-xl backdrop-blur-sm bg-gradient-to-r from-red-500/20 to-red-600/20 hover:from-red-500/30 hover:to-red-600/30 text-red-200 hover:text-white transition-all duration-200 border border-red-400/30 hover:border-red-300/50 shadow-lg cursor-pointer"
+                className="w-full text-left px-4 py-3 rounded-xl glass-error text-red-200 hover:text-white transition-all duration-200 cursor-pointer"
               >
                 <div className="flex items-center">
                   <svg

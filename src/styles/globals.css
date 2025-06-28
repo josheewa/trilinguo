@@ -1,8 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --vh: 1vh;
 }
 
 @theme inline {
@@ -19,8 +20,116 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+html,
+body,
+#__next {
+  height: 100%;
+  overflow: hidden; /* lock root scroll */
+  overscroll-behavior: none; /* stop bounce & chaining */
+}
+
+body.fixfixed .sticky {
+  position: absolute;
+}
+
+
+/* Only prevent zoom on iOS - everything else is Tailwind */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+.app {
+  height: calc(var(--vh) * 100);
+}
+
+/* Liquid Glass Design System - Pure Tailwind utilities */
+.liquid-bg-primary {
+  @apply bg-gradient-to-br from-slate-900 via-purple-900/80 to-slate-900/95;
+}
+
+.liquid-bg-overlay {
+  @apply bg-gradient-to-tl from-blue-500/10 via-purple-500/5 to-transparent;
+}
+
+.glass-surface {
+  @apply backdrop-blur-xl bg-white/8 border border-white/10 shadow-2xl shadow-black/20;
+}
+
+.glass-button {
+  @apply backdrop-blur-sm bg-white/6 hover:bg-white/12 border border-white/8 hover:border-white/15 transition-all duration-200 shadow-lg shadow-black/10;
+}
+
+.glass-button-primary {
+  @apply backdrop-blur-sm bg-gradient-to-r from-blue-500/80 to-purple-600/80 hover:from-blue-600/85 hover:to-purple-700/85 border border-blue-400/15 hover:border-blue-300/25 transition-all duration-200 shadow-lg shadow-blue-500/15;
+}
+
+.glass-button-secondary {
+  @apply backdrop-blur-sm bg-gradient-to-r from-emerald-500/80 to-emerald-600/80 hover:from-emerald-600/85 hover:to-emerald-700/85 border border-emerald-400/20 hover:border-emerald-300/30 transition-all duration-200 shadow-lg shadow-emerald-500/15;
+}
+
+.glass-input {
+  @apply backdrop-blur-sm bg-white/4 border border-white/8 focus:border-blue-400/20 focus:bg-white/8 transition-all duration-200 shadow-lg focus:shadow-blue-500/15 focus:ring-1 focus:ring-blue-400/10;
+}
+
+.glass-card {
+  @apply backdrop-blur-xl bg-gradient-to-b from-white/12 via-white/8 to-white/4 border border-white/10 shadow-2xl shadow-black/20;
+}
+
+.glass-bubble-user {
+  @apply backdrop-blur-xl bg-gradient-to-br from-blue-500/85 to-blue-600/85 border border-blue-400/15 shadow-lg shadow-blue-500/10;
+}
+
+.glass-bubble-assistant {
+  @apply backdrop-blur-xl bg-white/8 border border-white/10 shadow-lg shadow-black/10;
+}
+
+.glass-dropdown {
+  @apply backdrop-blur-xl bg-white/8 border border-white/10 shadow-2xl shadow-black/20;
+}
+
+.glass-overlay {
+  @apply bg-black/30 backdrop-blur-sm;
+}
+
+.glass-modal {
+  @apply backdrop-blur-xl bg-gradient-to-b from-white/15 via-white/10 to-white/5 border border-white/20 shadow-2xl;
+}
+
+.liquid-orb-blue {
+  @apply bg-blue-500/10 rounded-full blur-3xl animate-pulse;
+}
+
+.liquid-orb-purple {
+  @apply bg-purple-500/10 rounded-full blur-3xl animate-pulse;
+}
+
+/* Toggle switches for settings */
+.glass-toggle-active {
+  @apply bg-gradient-to-r from-emerald-500/80 to-emerald-600/80 border border-emerald-400/20 shadow-lg shadow-emerald-500/15;
+}
+
+.glass-toggle-inactive {
+  @apply bg-gradient-to-r from-gray-500/40 to-gray-600/40 border border-gray-400/15 shadow-lg shadow-gray-500/8;
+}
+
+/* Error/danger styles */
+.glass-error {
+  @apply backdrop-blur-sm bg-gradient-to-r from-red-500/15 to-red-600/15 border border-red-400/15 shadow-lg shadow-red-500/8;
+}
+
+/* Surface variations */
+.glass-surface-subtle {
+  @apply backdrop-blur-xl bg-white/4 border border-white/8 shadow-lg shadow-black/10;
+}
+
+/* Navigation styles */
+.glass-nav {
+  @apply backdrop-blur-xl bg-white/4 border border-white/8;
+}
+
+/* Panel styles */
+.glass-panel {
+  @apply backdrop-blur-xl bg-gradient-to-b from-white/15 via-white/10 to-white/6 border border-white/12 shadow-2xl shadow-black/20;
 }

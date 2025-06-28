@@ -8,7 +8,7 @@ export default function WelcomeScreen({
 }) {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-4">
-      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+      <div className="w-12 h-12 sm:w-16 sm:h-16 glass-button-primary rounded-full flex items-center justify-center mb-3 sm:mb-4 liquid-float">
         <span className="text-white font-bold text-xl sm:text-2xl">三</span>
       </div>
       <h2 className="text-lg sm:text-xl font-semibold text-gray-300 mb-2">
@@ -29,7 +29,7 @@ export default function WelcomeScreen({
             {[...Array(4)].map((_, index) => (
               <div
                 key={index}
-                className="px-4 py-3 bg-gray-800/50 rounded-2xl border border-gray-700/50 animate-pulse"
+                className="glass-surface-subtle px-4 py-3 rounded-2xl animate-pulse"
               >
                 <div
                   className={`h-4 bg-gray-600/30 rounded-md ${
@@ -51,7 +51,7 @@ export default function WelcomeScreen({
               <button
                 key={index}
                 onClick={() => handleStarterClick(starter)}
-                className="text-left px-4 py-3 bg-gray-800 hover:bg-gray-700 rounded-2xl text-sm text-gray-300 transition-all duration-200 border border-gray-700 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer"
+                className="glass-button text-left px-4 py-3 rounded-2xl text-sm text-gray-300 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer"
               >
                 {starter}
               </button>

@@ -9,7 +9,7 @@ const MessageBubble = ({ message, ...props }) => {
 
 const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit }) => (
   <div className="flex w-full justify-end items-end mb-3">
-    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative backdrop-blur-xl border shadow-lg bg-gradient-to-br from-blue-500/90 to-blue-600/90 text-white border-blue-400/30 rounded-[20px_20px_4px_20px]">
+    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-user text-white rounded-[20px_20px_4px_20px]">
       <div>
         <p className="text-sm sm:text-sm leading-relaxed">{message.content}</p>
         {/* Retry button for user messages with no response (but not while loading) */}
@@ -48,12 +48,10 @@ const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit }) 
 
 const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, showRomanization, showEnglish, handleSubmit, updateUiState }) => (
   <div className="flex w-full justify-start items-end mb-3">
-    <div
-      className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentLanguage.personality.color} flex items-center justify-center mr-2 mb-1 shadow-lg backdrop-blur-sm`}
-    >
+    <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentLanguage.personality.color} flex items-center justify-center mr-2 mb-1 glass-surface`}>
       <span className="text-white text-sm">{currentLanguage.personality.avatar}</span>
     </div>
-    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative backdrop-blur-xl border shadow-lg bg-white/10 text-white border-white/20 rounded-[20px_20px_20px_4px]">
+    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-assistant text-white rounded-[20px_20px_20px_4px]">
       <div className="space-y-2 sm:space-y-3">
         <div className="text-xs text-gray-400 font-medium">{currentLanguage.personality.name}</div>
         {!message.content ? (
@@ -93,7 +91,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
                 <button
                   onClick={() => handleSubmit(null, index - 1)} // Retry the previous user message
                   disabled={uiState.retryingMessageIndex === index - 1}
-                  className="inline-flex items-center px-3 py-1.5 text-xs bg-red-600 hover:bg-red-700 disabled:bg-red-700 disabled:opacity-50 text-white rounded-lg transition-colors cursor-pointer"
+                  className="glass-button-danger inline-flex items-center px-3 py-1.5 text-xs text-white rounded-lg transition-colors cursor-pointer disabled:opacity-50"
                 >
                   {uiState.retryingMessageIndex === index - 1 ? (
                     <>
@@ -152,12 +150,10 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
 
 const TypingIndicator = ({ currentLanguage }) => (
   <div className="flex w-full justify-start items-end mb-3">
-    <div
-      className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentLanguage.personality.color} flex items-center justify-center mr-2 mb-1 shadow-lg backdrop-blur-sm`}
-    >
+    <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentLanguage.personality.color} flex items-center justify-center mr-2 mb-1 glass-surface`}>
       <span className="text-white text-sm">{currentLanguage.personality.avatar}</span>
     </div>
-    <div className="max-w-[85%] sm:max-w-xs lg:max-w-md px-4 py-3 relative backdrop-blur-xl border shadow-lg bg-white/10 text-white border-white/20 rounded-[20px_20px_20px_4px]">
+    <div className="max-w-[85%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-assistant text-white rounded-[20px_20px_20px_4px]">
       <div className="text-xs text-gray-300 font-medium mb-2">{currentLanguage.personality.name}</div>
       <div className="flex space-x-1">
         <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce"></div>
