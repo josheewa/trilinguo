@@ -1,26 +1,13 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 
-// Global audio cache to persist across component re-renders
-const audioCache = new Map()
-const audioRefs = new Map()
-
 export const useAudioCache = () => {
+  // Local cache per hook instance - no global sharing
+  const audioCache = useRef(new Map())
+  const audioRefs = useRef(new Map())
+  
   const [loadingStates, setLoadingStates] = useState(new Map())
   const [playingStates, setPlayingStates] = useState(new Map())
-  
-  // Generate cache key from message content
-  const generateCacheKey = useCallback((messageContent, language) => {
-    if (!messageContent) return null
-    
-    let text = ''
-    if (messageContent.characters && Array.isArray(messageContent.characters)) {
-      text = messageContent.characters.map(char => char.text).join('')
-    } else if (messageContent.text) {
-      text = messageContent.text
-    }
-    
-    return `${language}-${text.slice(0, 100)}` // Use first 100 chars as key
-  }, [])
+  const [errorStates, setErrorStates] = useState(new Map())
 
   // Set loading state for a specific message
   const setLoading = useCallback((messageId, isLoading) => {
@@ -48,14 +35,32 @@ export const useAudioCache = () => {
     })
   }, [])
 
-  // Generate and cache audio for a message
-  const generateAudio = useCallback(async (messageContent, language, messageId) => {
-    const cacheKey = generateCacheKey(messageContent, language)
-    if (!cacheKey) return { success: false, error: 'Invalid message content' }
+  // Set error state for a specific message
+  const setError = useCallback((messageId, errorMessage) => {
+    setErrorStates(prev => {
+      const newStates = new Map(prev)
+      if (errorMessage) {
+        newStates.set(messageId, errorMessage)
+        // Clear error after 5 seconds
+        setTimeout(() => {
+          setErrorStates(current => {
+            const updated = new Map(current)
+            updated.delete(messageId)
+            return updated
+          })
+        }, 5000)
+      } else {
+        newStates.delete(messageId)
+      }
+      return newStates
+    })
+  }, [])
 
-    // Return cached audio if available
-    if (audioCache.has(cacheKey)) {
-      return { success: true, audioUrl: audioCache.get(cacheKey) }
+  // Generate and cache audio for a specific message
+  const generateAudio = useCallback(async (messageContent, language, messageId) => {
+    // Check if we already have cached audio for this specific message
+    if (audioCache.current.has(messageId)) {
+      return { success: true, audioUrl: audioCache.current.get(messageId) }
     }
 
     setLoading(messageId, true)
@@ -96,8 +101,8 @@ export const useAudioCache = () => {
       
       const audioUrl = URL.createObjectURL(audioBlob)
       
-      // Cache the audio URL
-      audioCache.set(cacheKey, audioUrl)
+      // Cache the audio URL for this specific message only
+      audioCache.current.set(messageId, audioUrl)
       
       return { success: true, audioUrl }
     } catch (error) {
@@ -106,31 +111,7 @@ export const useAudioCache = () => {
     } finally {
       setLoading(messageId, false)
     }
-  }, [generateCacheKey, setLoading])
-
-  // State for error messages
-  const [errorStates, setErrorStates] = useState(new Map())
-
-  // Set error state for a specific message
-  const setError = useCallback((messageId, errorMessage) => {
-    setErrorStates(prev => {
-      const newStates = new Map(prev)
-      if (errorMessage) {
-        newStates.set(messageId, errorMessage)
-        // Clear error after 5 seconds
-        setTimeout(() => {
-          setErrorStates(current => {
-            const updated = new Map(current)
-            updated.delete(messageId)
-            return updated
-          })
-        }, 5000)
-      } else {
-        newStates.delete(messageId)
-      }
-      return newStates
-    })
-  }, [])
+  }, [setLoading])
 
   // Play audio for a message
   const playAudio = useCallback(async (messageContent, language, messageId) => {
@@ -138,7 +119,7 @@ export const useAudioCache = () => {
     setError(messageId, null)
     
     // Stop any currently playing audio
-    audioRefs.forEach((audio, id) => {
+    audioRefs.current.forEach((audio, id) => {
       if (id !== messageId && !audio.paused) {
         audio.pause()
         audio.currentTime = 0
@@ -146,10 +127,10 @@ export const useAudioCache = () => {
       }
     })
 
-    const cacheKey = generateCacheKey(messageContent, language)
-    let audioUrl = audioCache.get(cacheKey)
+    // Check if we have cached audio for this message
+    let audioUrl = audioCache.current.get(messageId)
     
-    // Generate audio if not cached
+    // Generate audio if not cached for this specific message
     if (!audioUrl) {
       const result = await generateAudio(messageContent, language, messageId)
       if (!result.success) {
@@ -164,11 +145,11 @@ export const useAudioCache = () => {
       return
     }
 
-    // Create or get audio element
-    let audio = audioRefs.get(messageId)
+    // Create or get audio element for this specific message
+    let audio = audioRefs.current.get(messageId)
     if (!audio) {
       audio = new Audio(audioUrl)
-      audioRefs.set(messageId, audio)
+      audioRefs.current.set(messageId, audio)
       
       // Setup event listeners
       audio.addEventListener('ended', () => {
@@ -191,11 +172,11 @@ export const useAudioCache = () => {
       setPlaying(messageId, false)
       setError(messageId, 'Could not play audio')
     }
-  }, [generateAudio, generateCacheKey, setPlaying, setError])
+  }, [generateAudio, setPlaying, setError])
 
   // Stop audio for a message
   const stopAudio = useCallback((messageId) => {
-    const audio = audioRefs.get(messageId)
+    const audio = audioRefs.current.get(messageId)
     if (audio) {
       audio.pause()
       audio.currentTime = 0
@@ -221,18 +202,22 @@ export const useAudioCache = () => {
   // Cleanup function
   const cleanup = useCallback(() => {
     // Stop all audio
-    audioRefs.forEach((audio) => {
+    audioRefs.current.forEach((audio) => {
       audio.pause()
       audio.currentTime = 0
     })
-    audioRefs.clear()
+    audioRefs.current.clear()
+    
+    // Clean up audio URLs to prevent memory leaks
+    audioCache.current.forEach((audioUrl) => {
+      URL.revokeObjectURL(audioUrl)
+    })
+    audioCache.current.clear()
     
     // Clear states
     setLoadingStates(new Map())
     setPlayingStates(new Map())
     setErrorStates(new Map())
-    
-    // Note: We keep audioCache for performance, but could clear it here if needed
   }, [])
 
   // Cleanup on unmount
