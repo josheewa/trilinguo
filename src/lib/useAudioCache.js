@@ -51,11 +51,11 @@ export const useAudioCache = () => {
   // Generate and cache audio for a message
   const generateAudio = useCallback(async (messageContent, language, messageId) => {
     const cacheKey = generateCacheKey(messageContent, language)
-    if (!cacheKey) return null
+    if (!cacheKey) return { success: false, error: 'Invalid message content' }
 
     // Return cached audio if available
     if (audioCache.has(cacheKey)) {
-      return audioCache.get(cacheKey)
+      return { success: true, audioUrl: audioCache.get(cacheKey) }
     }
 
     setLoading(messageId, true)
@@ -73,26 +73,70 @@ export const useAudioCache = () => {
       })
 
       if (!response.ok) {
-        throw new Error(`TTS API error: ${response.status}`)
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        
+        // Handle specific error cases
+        if (response.status === 429) {
+          throw new Error('Please wait a moment before trying again')
+        } else if (response.status === 503) {
+          throw new Error('Audio service temporarily unavailable')
+        } else if (response.status >= 500) {
+          throw new Error('Server error - please try again')
+        } else {
+          throw new Error(errorData.details || errorData.error || `Error: ${response.status}`)
+        }
       }
 
       const audioBlob = await response.blob()
+      
+      // Validate audio blob
+      if (!audioBlob || audioBlob.size === 0) {
+        throw new Error('No audio data received')
+      }
+      
       const audioUrl = URL.createObjectURL(audioBlob)
       
       // Cache the audio URL
       audioCache.set(cacheKey, audioUrl)
       
-      return audioUrl
+      return { success: true, audioUrl }
     } catch (error) {
       console.error('Error generating audio:', error)
-      return null
+      return { success: false, error: error.message || 'Failed to generate audio' }
     } finally {
       setLoading(messageId, false)
     }
   }, [generateCacheKey, setLoading])
 
+  // State for error messages
+  const [errorStates, setErrorStates] = useState(new Map())
+
+  // Set error state for a specific message
+  const setError = useCallback((messageId, errorMessage) => {
+    setErrorStates(prev => {
+      const newStates = new Map(prev)
+      if (errorMessage) {
+        newStates.set(messageId, errorMessage)
+        // Clear error after 5 seconds
+        setTimeout(() => {
+          setErrorStates(current => {
+            const updated = new Map(current)
+            updated.delete(messageId)
+            return updated
+          })
+        }, 5000)
+      } else {
+        newStates.delete(messageId)
+      }
+      return newStates
+    })
+  }, [])
+
   // Play audio for a message
   const playAudio = useCallback(async (messageContent, language, messageId) => {
+    // Clear any existing error
+    setError(messageId, null)
+    
     // Stop any currently playing audio
     audioRefs.forEach((audio, id) => {
       if (id !== messageId && !audio.paused) {
@@ -102,14 +146,23 @@ export const useAudioCache = () => {
       }
     })
 
-    let audioUrl = audioCache.get(generateCacheKey(messageContent, language))
+    const cacheKey = generateCacheKey(messageContent, language)
+    let audioUrl = audioCache.get(cacheKey)
     
     // Generate audio if not cached
     if (!audioUrl) {
-      audioUrl = await generateAudio(messageContent, language, messageId)
+      const result = await generateAudio(messageContent, language, messageId)
+      if (!result.success) {
+        setError(messageId, result.error)
+        return
+      }
+      audioUrl = result.audioUrl
     }
 
-    if (!audioUrl) return
+    if (!audioUrl) {
+      setError(messageId, 'No audio available')
+      return
+    }
 
     // Create or get audio element
     let audio = audioRefs.get(messageId)
@@ -122,9 +175,10 @@ export const useAudioCache = () => {
         setPlaying(messageId, false)
       })
       
-      audio.addEventListener('error', () => {
-        console.error('Audio playback error')
+      audio.addEventListener('error', (event) => {
+        console.error('Audio playback error:', event)
         setPlaying(messageId, false)
+        setError(messageId, 'Audio playback failed')
       })
     }
 
@@ -135,8 +189,9 @@ export const useAudioCache = () => {
     } catch (error) {
       console.error('Audio play error:', error)
       setPlaying(messageId, false)
+      setError(messageId, 'Could not play audio')
     }
-  }, [generateAudio, generateCacheKey, setPlaying])
+  }, [generateAudio, generateCacheKey, setPlaying, setError])
 
   // Stop audio for a message
   const stopAudio = useCallback((messageId) => {
@@ -158,6 +213,11 @@ export const useAudioCache = () => {
     return playingStates.has(messageId)
   }, [playingStates])
 
+  // Get error state for a message
+  const getError = useCallback((messageId) => {
+    return errorStates.get(messageId) || null
+  }, [errorStates])
+
   // Cleanup function
   const cleanup = useCallback(() => {
     // Stop all audio
@@ -170,6 +230,7 @@ export const useAudioCache = () => {
     // Clear states
     setLoadingStates(new Map())
     setPlayingStates(new Map())
+    setErrorStates(new Map())
     
     // Note: We keep audioCache for performance, but could clear it here if needed
   }, [])
@@ -184,6 +245,7 @@ export const useAudioCache = () => {
     stopAudio,
     isLoading,
     isPlaying,
+    getError,
     cleanup,
   }
 }
