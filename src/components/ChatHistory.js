@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAudioCache } from '../lib/useAudioCache'
 
 const MessageBubble = ({ message, ...props }) => {
   if (message.role === 'user') {
