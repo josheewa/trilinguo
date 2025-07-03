@@ -40,6 +40,36 @@ select {
   font-size: 16px;
 }
 
+/* Safari safe area support */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Safari-specific fixes */
+@supports (-webkit-backdrop-filter: blur(10px)) {
+  .glass-surface {
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+  }
+  
+  /* Ensure glass effects are visible in Safari */
+  .glass-surface {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  }
+}
+
+/* Mobile Safari bottom area fix */
+@media screen and (max-width: 768px) {
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .chat-input-safe-area {
+      padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+    }
+  }
+}
+
 .app {
   height: calc(var(--vh) * 100);
 }

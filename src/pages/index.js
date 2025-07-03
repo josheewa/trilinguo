@@ -443,7 +443,7 @@ export default function Home() {
       
 
       {/* Main App Container - Pure Tailwind */}
-      <div className="app h-dvh flex flex-col overflow-hidden overscroll-none text-white">
+      <div className="h-screen flex flex-col overflow-hidden overscroll-none text-white">
         {/* Background */}
         <div className={`absolute inset-0 liquid-bg-primary ${uiState.showMobileMenu ? 'blur-sm' : ''}`}>
           <div className="liquid-bg-overlay absolute inset-0"></div>
@@ -452,7 +452,7 @@ export default function Home() {
         </div>
 
         {/* Header - Fixed at top */}
-        <div className="sticky top-0 z-20 flex-shrink-0">
+        <div className="flex-none">
           <Header
             currentLanguage={currentLanguage}
             showRomanization={showRomanization}
@@ -504,8 +504,8 @@ export default function Home() {
           )}
         </div>
 
-        {/* Input - Fixed at bottom */}
-        <div className="sticky bottom-0 z-20 flex-shrink-0">
+        {/* Input - Natural flow at bottom */}
+        <div className="flex-none">
           <ChatInput
             settings={settings}
             suggestions={suggestions}

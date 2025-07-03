@@ -10,7 +10,7 @@ export default function ChatInput({
   inputRef,
 }) {
   return (
-    <div className="flex-shrink-0 relative z-10 max-w-4xl mx-auto w-full p-4">
+    <div className="flex-shrink-0 relative z-10 max-w-4xl mx-auto w-full p-4 chat-input-safe-area" style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom, 24px))' }}>
       {/* Predictive Text Suggestions */}
       {settings.enablePredictiveText &&
         suggestions.length > 0 &&
@@ -46,6 +46,13 @@ export default function ChatInput({
       <form
         onSubmit={handleSubmit}
         className="glass-surface flex items-center gap-3 rounded-3xl focus-within:border-blue-400/50 focus-within:shadow-lg focus-within:shadow-blue-500/25 transition-all duration-200 p-4"
+        style={{ 
+          minHeight: '64px',
+          marginBottom: '8px',
+          backgroundColor: 'rgba(255, 255, 255, 0.12)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)'
+        }}
       >
         <div className="flex-1 min-h-0 flex items-center">
           <textarea
@@ -65,7 +72,7 @@ export default function ChatInput({
                 handleSubmit(e)
               }
             }}
-            placeholder="Ask a question or start a conversation..."
+            placeholder="Say something..."
             className="w-full bg-transparent text-white placeholder-gray-300 resize-none border-none outline-none text-sm leading-relaxed min-h-[32px] max-h-[240px]"
             rows="1"
             style={{
