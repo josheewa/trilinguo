@@ -24,7 +24,7 @@ export default function CulturalContextPanel({ culturalContext, onClose }) {
               className="glass-button p-2 rounded-xl cursor-pointer"
             >
               <svg
-                className="w-4 h-4 text-gray-300 hover:text-white"
+                className="w-4 h-4 text-gray-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

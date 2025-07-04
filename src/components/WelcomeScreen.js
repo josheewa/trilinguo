@@ -8,7 +8,7 @@ export default function WelcomeScreen({
 }) {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-4">
-      <div className="w-12 h-12 sm:w-16 sm:h-16 glass-button-primary rounded-full flex items-center justify-center mb-3 sm:mb-4 liquid-float">
+      <div className="w-12 h-12 sm:w-16 sm:h-16 glass-button-primary rounded-full flex items-center justify-center mb-3 sm:mb-4">
         <span className="text-white font-bold text-xl sm:text-2xl">三</span>
       </div>
       <h2 className="text-lg sm:text-xl font-semibold text-gray-300 mb-2">
@@ -51,7 +51,7 @@ export default function WelcomeScreen({
               <button
                 key={index}
                 onClick={() => handleStarterClick(starter)}
-                className="glass-button text-left px-4 py-3 rounded-2xl text-sm text-gray-300 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer"
+                className="glass-button text-left px-4 py-3 rounded-2xl text-sm text-gray-300 cursor-pointer transition-all duration-300"
               >
                 {starter}
               </button>

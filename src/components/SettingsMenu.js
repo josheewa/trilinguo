@@ -38,7 +38,7 @@ export default function SettingsMenu({
               className="glass-button p-2 rounded-xl cursor-pointer"
             >
               <svg
-                className="w-4 h-4 text-gray-300 hover:text-white"
+                className="w-4 h-4 text-gray-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -82,7 +82,7 @@ export default function SettingsMenu({
           <h3 className="text-sm font-medium text-gray-300 mb-3">Settings</h3>
           <div className="space-y-3">
             {/* English Toggle */}
-            <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3">
+            <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3 cursor-pointer">
               <span className="text-sm text-gray-200 font-medium">Show English</span>
               <button
                 onClick={() => updateSettings({ showEnglish: !showEnglish })}
@@ -105,13 +105,8 @@ export default function SettingsMenu({
 
             {/* Romanization Toggle - only show if current language supports it */}
             {currentLanguage.hasRomanization && (
-              <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3">
-                <span className="text-sm text-gray-200 font-medium">
-                  Show {currentLanguage.romanizationName === 'pinyin' ? 'Pinyin 拼音' : 
-                        currentLanguage.romanizationName === 'romaji' ? 'Romaji ローマ字' :
-                        currentLanguage.romanizationName === 'romanization' ? 'Romanization 로마자' :
-                        currentLanguage.romanizationLabel}
-                </span>
+              <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3 cursor-pointer">
+                <span className="text-sm text-gray-200 font-medium">Show {currentLanguage.romanizationLabel}</span>
                 <button
                   onClick={() => updateSettings({ showRomanization: !showRomanization })}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 cursor-pointer ${
@@ -122,7 +117,7 @@ export default function SettingsMenu({
                   role="switch"
                   aria-checked={showRomanization}
                 >
-                  <span className="sr-only">Show romanization</span>
+                  <span className="sr-only">Show {currentLanguage.romanizationLabel}</span>
                   <span
                     className={`${
                       showRomanization ? 'translate-x-6' : 'translate-x-1'
@@ -132,8 +127,7 @@ export default function SettingsMenu({
               </label>
             )}
 
-            {/* Predictive Text Toggle */}
-            <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3">
+            <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3 cursor-pointer">
               <span className="text-sm text-gray-200 font-medium">Predictive Text</span>
               <button
                 onClick={() =>
@@ -159,7 +153,7 @@ export default function SettingsMenu({
             {messages.length > 0 && (
               <button
                 onClick={handleClearChat}
-                className="w-full text-left px-4 py-3 rounded-xl glass-error text-red-200 hover:text-white transition-all duration-200 cursor-pointer"
+                className="w-full text-left px-4 py-3 rounded-xl glass-error text-red-200 transition-all duration-200 cursor-pointer"
               >
                 <div className="flex items-center">
                   <svg

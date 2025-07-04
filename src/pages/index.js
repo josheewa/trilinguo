@@ -186,10 +186,10 @@ export default function Home() {
     }
   }, [updateUiState, closeAllDropdowns])
 
-  // Mouse tracking for glass hover effects
+  // Mouse tracking for glass hover effects - SIMPLE approach like ChatInput
   useEffect(() => {
     const handleMouseMove = (e) => {
-      const glassElements = document.querySelectorAll('.glass-surface, .glass-button, .glass-card, .glass-dropdown, .glass-modal, .glass-surface-subtle, .glass-panel')
+      const glassElements = document.querySelectorAll('.glass-surface, .glass-button, .glass-button-primary, .glass-button-secondary, .glass-button-blue, .glass-button-selected, .glass-card, .glass-dropdown, .glass-dropdown-fixed, .glass-modal, .glass-surface-subtle, .glass-panel, .glass-bubble-user, .glass-bubble-assistant, .glass-input, .glass-error, .glass-button-danger, .glass-toggle-active, .glass-toggle-inactive, .glass-toggle-inactive-contrast, .glass-nav, .glass-logo, .glass-button-light, .glass-button-blue-light, .glass-button-emerald-light, .glass-button-red-light')
       
       glassElements.forEach((element) => {
         const rect = element.getBoundingClientRect()
@@ -445,7 +445,7 @@ export default function Home() {
       {/* Main App Container - Pure Tailwind */}
       <div className="h-screen flex flex-col overflow-hidden overscroll-none text-white">
         {/* Background */}
-        <div className={`absolute inset-0 liquid-bg-primary ${uiState.showMobileMenu ? 'blur-sm' : ''}`}>
+        <div className={`absolute inset-0 liquid-bg-primary`}>
           <div className="liquid-bg-overlay absolute inset-0"></div>
           <div className="absolute top-1/4 left-1/4 w-96 h-96 liquid-orb-blue"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 liquid-orb-purple"></div>
@@ -482,7 +482,7 @@ export default function Home() {
         />
 
         {/* Chat Content - Scrollable */}
-        <div className={`flex-1 overflow-y-auto overscroll-contain px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4 relative z-10 max-w-4xl mx-auto w-full ${uiState.showMobileMenu ? 'blur-sm' : ''}`}>
+        <div className={`flex-1 overflow-y-auto overscroll-contain px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4 relative z-10 max-w-4xl mx-auto w-full`}>
           {messages.length === 0 ? (
             <WelcomeScreen
               currentLanguage={currentLanguage}

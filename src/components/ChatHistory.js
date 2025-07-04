@@ -31,8 +31,8 @@ const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => 
   }
 
   const getButtonClass = () => {
-    if (error) return "glass-button text-red-400 hover:text-red-300 p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
-    return "glass-button text-gray-300 hover:text-white p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
+    if (error) return "glass-button text-red-400 p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
+    return "glass-button text-gray-300 p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
   }
 
   const getAriaLabel = () => {
@@ -109,7 +109,7 @@ const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit }) 
             <button
               onClick={() => handleSubmit(null, index)}
               disabled={uiState.retryingMessageIndex === index}
-              className="inline-flex items-center text-xs text-blue-200 hover:text-white transition-colors cursor-pointer"
+              className="inline-flex items-center text-xs text-blue-200 transition-colors cursor-pointer"
             >
               {uiState.retryingMessageIndex === index ? (
                 <>
@@ -159,13 +159,17 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
             />
           )}
         </div>
-        {!message.content ? (
-          <span className="text-base sm:text-lg font-medium text-red-400">[Message content missing]</span>
+
+        {message.isError ? (
+          <div className="text-red-300 text-sm">
+            {message.content || 'Sorry, something went wrong. Please try again.'}
+          </div>
         ) : (
           <>
-            <div className="flex flex-wrap items-end leading-relaxed">
-              {message.content.characters && Array.isArray(message.content.characters) ? (
-                message.content.characters.map((obj, i) => (
+            {/* Character display */}
+            {message.content.characters && Array.isArray(message.content.characters) && (
+              <div className="flex flex-wrap items-end leading-relaxed">
+                {message.content.characters.map((obj, i) => (
                   <div
                     key={i}
                     className={
@@ -181,22 +185,26 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
                     )}
                     <span className="text-base sm:text-lg font-medium leading-none">{obj.text || ''}</span>
                   </div>
-                ))
-              ) : message.content.text ? (
-                <span className="text-base sm:text-lg font-medium leading-relaxed">{message.content.text}</span>
-              ) : (
-                <span className="text-base sm:text-lg font-medium text-red-400 leading-relaxed">
-                  [Error displaying message]
-                </span>
-              )}
-            </div>
+                ))}
+              </div>
+            )}
+
+            {/* Text display (for languages without character breakdown) */}
+            {message.content.text && !message.content.characters && (
+              <div className="text-sm sm:text-base leading-relaxed">
+                <p className="text-white">{message.content.text}</p>
+                {showRomanization && message.content.romanization && (
+                  <p className="text-xs text-gray-300 mt-1">{message.content.romanization}</p>
+                )}
+              </div>
+            )}
 
             {message.isError && (
               <div className="flex items-center gap-2 pt-2">
                 <button
                   onClick={() => handleSubmit(null, index - 1)} // Retry the previous user message
                   disabled={uiState.retryingMessageIndex === index - 1}
-                  className="glass-button-danger inline-flex items-center px-3 py-1.5 text-xs text-white rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                  className="glass-error inline-flex items-center px-3 py-1.5 text-xs text-white rounded-lg transition-colors cursor-pointer disabled:opacity-50"
                 >
                   {uiState.retryingMessageIndex === index - 1 ? (
                     <>
@@ -228,7 +236,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
             {message.content.culturalContext && (
               <button
                 onClick={() => updateUiState({ culturalContextModal: message.content.culturalContext })}
-                className="inline-flex items-center text-xs text-gray-200 hover:text-blue-400 transition-colors cursor-pointer"
+                className="inline-flex items-center text-xs text-gray-200 transition-colors cursor-pointer"
               >
                 <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path
@@ -288,25 +296,37 @@ export default function ChatHistory({
   const audioControls = useAudioCache()
   
   return (
-    <>
-      {messages.map((message, index) => (
-        <MessageBubble
-          key={index}
-          index={index}
-          message={message}
-          messages={messages}
-          uiState={uiState}
-          currentLanguage={currentLanguage}
-          showRomanization={showRomanization}
-          showEnglish={showEnglish}
-          handleSubmit={handleSubmit}
-          updateUiState={updateUiState}
-          audioControls={audioControls}
-        />
-      ))}
+    <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-4">
+      <div className="max-w-4xl mx-auto">
+        {messages.map((message, index) =>
+          message.role === 'user' ? (
+            <UserMessageBubble
+              key={index}
+              message={message}
+              index={index}
+              messages={messages}
+              uiState={uiState}
+              handleSubmit={handleSubmit}
+            />
+          ) : (
+            <AssistantMessageBubble
+              key={index}
+              message={message}
+              index={index}
+              uiState={uiState}
+              currentLanguage={currentLanguage}
+              showRomanization={showRomanization}
+              showEnglish={showEnglish}
+              handleSubmit={handleSubmit}
+              updateUiState={updateUiState}
+              audioControls={audioControls}
+            />
+          )
+        )}
 
-      {uiState.isLoading && <TypingIndicator currentLanguage={currentLanguage} />}
-      <div ref={messagesEndRef} />
-    </>
+        {uiState.isLoading && <TypingIndicator currentLanguage={currentLanguage} />}
+        <div ref={messagesEndRef} />
+      </div>
+    </div>
   )
 } 
