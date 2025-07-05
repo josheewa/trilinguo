@@ -171,20 +171,26 @@ export default function Home() {
       }
     }
 
-    const handleEscapeKey = (event) => {
+    const handleKeyboardShortcuts = (event) => {
       if (event.key === 'Escape') {
         closeAllDropdowns()
         updateUiState({ culturalContextModal: null, showClearConfirmModal: false })
       }
+      
+      // Cmd/Ctrl + ',' to open settings
+      if (event.key === ',' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault()
+        updateUiState({ showMobileMenu: !uiState.showMobileMenu })
+      }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
-    document.addEventListener('keydown', handleEscapeKey)
+    document.addEventListener('keydown', handleKeyboardShortcuts)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('keydown', handleEscapeKey)
+      document.removeEventListener('keydown', handleKeyboardShortcuts)
     }
-  }, [updateUiState, closeAllDropdowns])
+      }, [updateUiState, closeAllDropdowns, uiState.showMobileMenu])
 
   // Mouse tracking for glass hover effects - SIMPLE approach like ChatInput
   useEffect(() => {
