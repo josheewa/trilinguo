@@ -189,16 +189,19 @@ export default function Home() {
   // Mouse tracking for glass hover effects - SIMPLE approach like ChatInput
   useEffect(() => {
     const handleMouseMove = (e) => {
-      const glassElements = document.querySelectorAll('.glass-surface, .glass-button, .glass-button-primary, .glass-button-secondary, .glass-button-blue, .glass-button-selected, .glass-card, .glass-dropdown, .glass-dropdown-fixed, .glass-modal, .glass-surface-subtle, .glass-panel, .glass-bubble-user, .glass-bubble-assistant, .glass-input, .glass-error, .glass-button-danger, .glass-toggle-active, .glass-toggle-inactive, .glass-toggle-inactive-contrast, .glass-nav, .glass-logo, .glass-button-light, .glass-button-blue-light, .glass-button-emerald-light, .glass-button-red-light')
-      
-      glassElements.forEach((element) => {
-        const rect = element.getBoundingClientRect()
-        const x = ((e.clientX - rect.left) / rect.width) * 100
-        const y = ((e.clientY - rect.top) / rect.height) * 100
+            const glassElements = document.querySelectorAll('.glass-surface, .glass-button, .glass-button-primary, .glass-button-secondary, .glass-button-blue, .glass-button-selected, .glass-card, .glass-dropdown, .glass-dropdown-fixed, .glass-modal, .glass-surface-subtle, .glass-panel, .glass-bubble-user, .glass-bubble-assistant, .glass-input, .glass-error, .glass-button-danger, .glass-toggle-active, .glass-toggle-inactive, .glass-toggle-inactive-contrast, .glass-nav, .glass-logo, .glass-button-light, .glass-button-blue-light, .glass-button-emerald-light, .glass-button-red-light, .glass-panel .glass-button, .glass-panel .glass-button-selected, .glass-panel .glass-surface-subtle, .glass-panel .glass-error')
         
-        element.style.setProperty('--mouse-x', `${x}%`)
-        element.style.setProperty('--mouse-y', `${y}%`)
-      })
+        glassElements.forEach((element) => {
+          const rect = element.getBoundingClientRect()
+          const x = ((e.clientX - rect.left) / rect.width) * 100
+          const y = ((e.clientY - rect.top) / rect.height) * 100
+          
+          element.style.setProperty('--mouse-x', `${x}%`)
+          element.style.setProperty('--mouse-y', `${y}%`)
+        })
+
+
+
     }
 
     document.addEventListener('mousemove', handleMouseMove)
