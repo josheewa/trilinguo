@@ -163,8 +163,13 @@ export default function Home() {
   // Handle outside clicks and escape key
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Check if click is outside language dropdown (including the dropdown menu itself)
       if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target)) {
-        updateUiState({ showLanguageDropdown: false })
+        // Also check if the click is on the dropdown menu (which is rendered separately)
+        const dropdownMenu = document.querySelector('.glass-dropdown-fixed')
+        if (!dropdownMenu || !dropdownMenu.contains(event.target)) {
+          updateUiState({ showLanguageDropdown: false })
+        }
       }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
         updateUiState({ showMobileMenu: false })

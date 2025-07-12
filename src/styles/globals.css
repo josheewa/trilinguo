@@ -15,6 +15,9 @@
   --color-foreground: var(--foreground);
   --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Monaco", "Inconsolata", "Fira Code", "Droid Sans Mono", "Courier New", monospace;
+  --font-chinese: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+  --font-japanese: "Hiragino Sans", "Yu Gothic", "Meiryo", "Takao", "IPAexGothic", "IPAGothic", "Verdana", "Arial", sans-serif;
+  --font-korean: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", "Nanum Gothic", "Helvetica Neue", "Arial", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -207,15 +210,15 @@ select {
 
 /* Other button variants */
 .glass-button-secondary, .glass-button-emerald-light {
-  @apply backdrop-blur-lg border border-emerald-400/[0.12] transition-all duration-300 shadow-lg shadow-emerald-500/20 overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.08) 0%, transparent 60%), rgba(16, 185, 129, 0.05) !important;
-  box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.12), 0 6px 18px rgba(16, 185, 129, 0.15) !important;
+  @apply backdrop-blur-lg border border-emerald-400/[0.25] transition-all duration-300 shadow-lg shadow-emerald-500/30 overflow-hidden;
+  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.18) 0%, transparent 60%), rgba(16, 185, 129, 0.12) !important;
+  box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.25), 0 6px 18px rgba(16, 185, 129, 0.25) !important;
   border-radius: 12px;
 }
 .glass-button-secondary::before, .glass-button-emerald-light::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.08) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0.15) 50%, transparent 80%);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   pointer-events: none; z-index: 1; border-radius: inherit;
@@ -223,9 +226,9 @@ select {
 .glass-button-secondary:hover::before, .glass-button-emerald-light:hover::before { opacity: 1; }
 .glass-button-secondary:hover, .glass-button-emerald-light:hover {
   transform: translateY(-2px);
-  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.12) 0%, transparent 60%), rgba(16, 185, 129, 0.08) !important;
-  border-color: rgba(16, 185, 129, 0.2) !important;
-  box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.18), 0 12px 30px rgba(16, 185, 129, 0.25), 0 6px 15px rgba(16, 185, 129, 0.15) !important;
+  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.22) 0%, transparent 60%), rgba(16, 185, 129, 0.16) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.3), 0 12px 30px rgba(16, 185, 129, 0.35), 0 6px 15px rgba(16, 185, 129, 0.25) !important;
 }
 
 .glass-button-blue {
@@ -480,14 +483,14 @@ select {
 
 /* Error & Danger States */
 .glass-error, .glass-button-danger, .glass-button-red-light {
-  @apply backdrop-blur-lg border border-red-400/[0.12] shadow-lg shadow-red-500/15 relative overflow-hidden;
-  background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.1) 0%, transparent 70%), rgba(239, 68, 68, 0.05) !important;
-  box-shadow: inset 0 1px 0 rgba(239, 68, 68, 0.15), 0 6px 12px rgba(239, 68, 68, 0.12) !important;
+  @apply backdrop-blur-lg border border-red-400/[0.25] shadow-lg shadow-red-500/25 relative overflow-hidden;
+  background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.18) 0%, transparent 70%), rgba(239, 68, 68, 0.12) !important;
+  box-shadow: inset 0 1px 0 rgba(239, 68, 68, 0.25), 0 6px 12px rgba(239, 68, 68, 0.22) !important;
 }
 .glass-error::before, .glass-button-danger::before, .glass-button-red-light::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 60%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(239, 68, 68, 0.25) 0%, rgba(239, 68, 68, 0.12) 60%, transparent 80%);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   pointer-events: none; z-index: 1; border-radius: inherit;
@@ -495,7 +498,7 @@ select {
 .glass-error:hover::before, .glass-button-danger:hover::before, .glass-button-red-light:hover::before { opacity: 1; }
 .glass-error:hover, .glass-button-danger:hover, .glass-button-red-light:hover {
   transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 rgba(239, 68, 68, 0.2), 0 12px 30px rgba(239, 68, 68, 0.25), 0 6px 15px rgba(239, 68, 68, 0.15) !important;
+  box-shadow: inset 0 1px 0 rgba(239, 68, 68, 0.3), 0 12px 30px rgba(239, 68, 68, 0.35), 0 6px 15px rgba(239, 68, 68, 0.25) !important;
 }
 .glass-button-danger, .glass-button-red-light { border-radius: 12px; }
 
@@ -528,15 +531,15 @@ select {
 
 /* Light buttons */
 .glass-button-light {
-  @apply backdrop-blur-lg border border-white/[0.15] transition-all duration-300 shadow-lg shadow-black/20 relative overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 60%), rgba(255, 255, 255, 0.04) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 6px 15px rgba(0, 0, 0, 0.2) !important;
+  @apply backdrop-blur-lg border border-white/[0.2] transition-all duration-300 shadow-lg shadow-black/25 relative overflow-hidden;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.12) 0%, transparent 60%), rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 15px rgba(0, 0, 0, 0.25) !important;
   border-radius: 12px;
 }
 .glass-button-light::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 50%, transparent 80%);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   pointer-events: none; z-index: 1; border-radius: inherit;
@@ -544,21 +547,21 @@ select {
 .glass-button-light:hover::before { opacity: 1; }
 .glass-button-light:hover {
   transform: translateY(-2px);
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.12) 0%, transparent 60%), rgba(255, 255, 255, 0.08) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 12px 30px rgba(0, 0, 0, 0.25), 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.18) 0%, transparent 60%), rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 12px 30px rgba(0, 0, 0, 0.3), 0 6px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 .glass-button-blue-light {
-  @apply backdrop-blur-lg border border-blue-400/[0.2] transition-all duration-300 shadow-lg shadow-blue-500/20 overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 60%), rgba(59, 130, 246, 0.08) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.2), 0 6px 18px rgba(59, 130, 246, 0.2) !important;
+  @apply backdrop-blur-lg border border-blue-400/[0.3] transition-all duration-300 shadow-lg shadow-blue-500/30 overflow-hidden;
+  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.25) 0%, transparent 60%), rgba(59, 130, 246, 0.15) !important;
+  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.3), 0 6px 18px rgba(59, 130, 246, 0.25) !important;
   border-radius: 12px;
 }
 .glass-button-blue-light::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0.12) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.35) 0%, rgba(59, 130, 246, 0.18) 50%, transparent 80%);
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   pointer-events: none; z-index: 1; border-radius: inherit;
@@ -566,12 +569,179 @@ select {
 .glass-button-blue-light:hover::before { opacity: 1; }
 .glass-button-blue-light:hover {
   transform: translateY(-2px);
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.2) 0%, transparent 60%), rgba(59, 130, 246, 0.12) !important;
-  border-color: rgba(59, 130, 246, 0.3) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.25), 0 12px 35px rgba(59, 130, 246, 0.3), 0 6px 18px rgba(59, 130, 246, 0.2) !important;
+  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.3) 0%, transparent 60%), rgba(59, 130, 246, 0.2) !important;
+  border-color: rgba(59, 130, 246, 0.4) !important;
+  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.35), 0 12px 35px rgba(59, 130, 246, 0.4), 0 6px 18px rgba(59, 130, 246, 0.25) !important;
 }
 
 
 /* High-specificity overrides */
 .settings-panel-closed { position: fixed !important; top: 0 !important; right: 0 !important; transform: translateX(100%) !important; }
 .settings-panel-open { position: fixed !important; top: 0 !important; right: 0 !important; transform: translateX(0) !important; }
+
+/* ==========================================================================
+   Language Text Styling
+   ========================================================================== */
+
+/* Chinese Character Styling */
+.chinese-text {
+  font-family: var(--font-chinese);
+  font-size: 1.375rem; /* 22px */
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 640px) {
+  .chinese-text {
+    font-size: 1.25rem; /* 20px */
+  }
+}
+
+/* Japanese Character Styling */
+.japanese-text {
+  font-family: var(--font-japanese);
+  font-size: 1.375rem; /* 22px */
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 640px) {
+  .japanese-text {
+    font-size: 1.25rem; /* 20px */
+  }
+}
+
+/* Korean Character Styling */
+.korean-text {
+  font-family: var(--font-korean);
+  font-size: 1.375rem; /* 22px */
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 640px) {
+  .korean-text {
+    font-size: 1.25rem; /* 20px */
+  }
+}
+
+/* General Language Text for other languages */
+.language-text {
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 640px) {
+  .language-text {
+    font-size: 1.125rem; /* 18px */
+  }
+}
+
+/* Character Display Container */
+.character-display {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.25rem;
+  line-height: 1.2;
+}
+
+/* Character with Pinyin Container */
+.character-with-pinyin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0.125rem;
+  min-width: 0;
+}
+
+/* Character without Pinyin Container */
+.character-without-pinyin {
+  display: flex;
+  align-items: flex-end;
+  margin: 0 0.125rem;
+}
+
+/* Pinyin/Romanization Styling */
+.pinyin-text {
+  font-family: var(--font-mono);
+  font-size: 0.75rem; /* 12px */
+  line-height: 1;
+  color: rgba(229, 231, 235, 0.9); /* gray-200 with slight transparency */
+  margin-bottom: 0.25rem;
+  text-align: center;
+  white-space: nowrap;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+}
+
+@media (max-width: 640px) {
+  .pinyin-text {
+    font-size: 0.6875rem; /* 11px */
+  }
+}
+
+/* Character Text Styling */
+.character-text {
+  font-family: var(--font-chinese);
+  font-size: 1.375rem; /* 22px */
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: white;
+}
+
+@media (max-width: 640px) {
+  .character-text {
+    font-size: 1.25rem; /* 20px */
+  }
+}
+
+/* Enhanced spacing for better readability */
+.message-content {
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+/* User message text styling */
+.user-message-text {
+  font-size: 1rem; /* 16px */
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 640px) {
+  .user-message-text {
+    font-size: 0.9rem; /* 14px */
+  }
+}
+
+/* User message with Chinese/Japanese/Korean text */
+.user-message-text.chinese-text {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 500;
+}
+
+.user-message-text.japanese-text {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 500;
+}
+
+.user-message-text.korean-text {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .user-message-text.chinese-text,
+  .user-message-text.japanese-text,
+  .user-message-text.korean-text {
+    font-size: 1rem; /* 16px */
+  }
+}

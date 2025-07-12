@@ -109,7 +109,7 @@ export default function Header({
           <button
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
-            className={`w-full text-left px-5 py-3 transition-all duration-200 first:rounded-t-xl last:rounded-b-xl cursor-pointer relative overflow-hidden ${
+            className={`w-full text-left px-5 py-3 transition-all duration-200 first:rounded-t-xl last:rounded-b-xl cursor-pointer relative overflow-hidden hover:bg-white/5 ${
               currentLanguage.code === lang.code
                 ? 'text-blue-300'
                 : 'text-gray-200'

@@ -1,6 +1,21 @@
 import React from 'react'
 import { useAudioCache } from '../lib/useAudioCache'
 
+// Helper function to get language-specific text class
+const getLanguageTextClass = (languageCode) => {
+  switch (languageCode) {
+    case 'zh-tw':
+    case 'zh-cn':
+      return 'chinese-text'
+    case 'ja':
+      return 'japanese-text'
+    case 'ko':
+      return 'korean-text'
+    default:
+      return 'language-text'
+  }
+}
+
 const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => {
   const { playAudio, stopAudio, isLoading, isPlaying, getError } = audioControls
   const loading = isLoading(messageId)
@@ -98,11 +113,13 @@ const MessageBubble = ({ message, ...props }) => {
   return <AssistantMessageBubble message={message} {...props} />
 }
 
-const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit }) => (
+const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit, currentLanguage }) => (
   <div className="flex w-full justify-end items-end mb-3">
     <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-user text-white rounded-[20px_20px_4px_20px]">
       <div>
-        <p className="text-sm sm:text-sm leading-relaxed">{message.content}</p>
+        <p className={`user-message-text text-white ${getLanguageTextClass(currentLanguage.code)}`}>
+          {message.content}
+        </p>
         {/* Retry button for user messages with no response (but not while loading) */}
         {index === messages.length - 1 && !uiState.isLoading && (
           <div className="mt-2 pt-2 border-t border-blue-500">
@@ -168,22 +185,24 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
           <>
             {/* Character display */}
             {message.content.characters && Array.isArray(message.content.characters) && (
-              <div className="flex flex-wrap items-end leading-relaxed">
+              <div className="character-display message-content">
                 {message.content.characters.map((obj, i) => (
                   <div
                     key={i}
                     className={
                       (obj.romanization || obj.pinyin) && showRomanization && obj.text.trim()
-                        ? 'flex flex-col items-center mx-0.5 min-w-0'
-                        : 'flex items-end mx-0.5'
+                        ? 'character-with-pinyin'
+                        : 'character-without-pinyin'
                     }
                   >
                     {(obj.romanization || obj.pinyin) && showRomanization && obj.text.trim() && (
-                      <span className="text-xs text-gray-200 mb-0.5 font-mono leading-none text-center whitespace-nowrap">
+                      <span className="pinyin-text">
                         {obj.romanization || obj.pinyin}
                       </span>
                     )}
-                    <span className="text-base sm:text-lg font-medium leading-none">{obj.text || ''}</span>
+                    <span className={`character-text ${getLanguageTextClass(currentLanguage.code)}`}>
+                      {obj.text || ''}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -191,10 +210,12 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
 
             {/* Text display (for languages without character breakdown) */}
             {message.content.text && !message.content.characters && (
-              <div className="text-sm sm:text-base leading-relaxed">
-                <p className="text-white">{message.content.text}</p>
+              <div className="message-content">
+                <p className={`text-white ${getLanguageTextClass(currentLanguage.code)}`}>
+                  {message.content.text}
+                </p>
                 {showRomanization && message.content.romanization && (
-                  <p className="text-xs text-gray-300 mt-1">{message.content.romanization}</p>
+                  <p className="pinyin-text mt-2 text-left">{message.content.romanization}</p>
                 )}
               </div>
             )}
@@ -250,8 +271,10 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
             )}
 
             {showEnglish && message.content.english && (
-              <div className="pt-2 border-t border-gray-600">
-                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">{message.content.english}</p>
+              <div className="pt-3 border-t border-gray-600">
+                <p className="text-sm sm:text-base text-gray-300 leading-relaxed message-content">
+                  {message.content.english}
+                </p>
               </div>
             )}
           </>
@@ -307,6 +330,7 @@ export default function ChatHistory({
               messages={messages}
               uiState={uiState}
               handleSubmit={handleSubmit}
+              currentLanguage={currentLanguage}
             />
           ) : (
             <AssistantMessageBubble
