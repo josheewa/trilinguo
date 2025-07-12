@@ -46,8 +46,8 @@ const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => 
   }
 
   const getButtonClass = () => {
-    if (error) return "glass-button text-red-400 p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
-    return "glass-button text-gray-300 p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
+    if (error) return "glass-button text-red-600 p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
+    return "glass-button text-gray-700 p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
   }
 
   const getAriaLabel = () => {
@@ -79,7 +79,7 @@ const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => 
       tabIndex={0}
     >
       {loading ? (
-        <div className="animate-spin rounded-full h-4 w-4 border-b border-gray-300"></div>
+        <div className="animate-spin rounded-full h-4 w-4 border-b border-gray-700"></div>
       ) : error ? (
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
@@ -115,22 +115,22 @@ const MessageBubble = ({ message, ...props }) => {
 
 const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit, currentLanguage }) => (
   <div className="flex w-full justify-end items-end mb-3">
-    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-user text-white rounded-[20px_20px_4px_20px]">
+    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-user text-gray-800 rounded-[20px_20px_4px_20px]">
       <div>
-        <p className={`user-message-text text-white ${getLanguageTextClass(currentLanguage.code)}`}>
+        <p className={`user-message-text text-gray-800 ${getLanguageTextClass(currentLanguage.code)}`}>
           {message.content}
         </p>
         {/* Retry button for user messages with no response (but not while loading) */}
         {index === messages.length - 1 && !uiState.isLoading && (
-          <div className="mt-2 pt-2 border-t border-blue-500">
+          <div className="mt-2 pt-2 border-t border-blue-600">
             <button
               onClick={() => handleSubmit(null, index)}
               disabled={uiState.retryingMessageIndex === index}
-              className="inline-flex items-center text-xs text-blue-200 transition-colors cursor-pointer"
+              className="inline-flex items-center text-xs text-blue-700 transition-colors cursor-pointer"
             >
               {uiState.retryingMessageIndex === index ? (
                 <>
-                  <div className="animate-spin rounded-full h-3 w-3 border-b border-blue-200 mr-2"></div>
+                  <div className="animate-spin rounded-full h-3 w-3 border-b border-blue-700 mr-2"></div>
                   Sending...
                 </>
               ) : (
@@ -157,12 +157,12 @@ const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit, cu
 const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, showRomanization, showEnglish, handleSubmit, updateUiState, audioControls }) => (
   <div className="flex w-full justify-start items-end mb-3">
     <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentLanguage.personality.color} flex items-center justify-center mr-2 mb-1 glass-surface`}>
-      <span className="text-white text-sm">{currentLanguage.personality.avatar}</span>
+      <span className="text-gray-800 text-sm font-medium">{currentLanguage.personality.avatar}</span>
     </div>
-    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-assistant text-white rounded-[20px_20px_20px_4px]">
+    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-assistant text-gray-800 rounded-[20px_20px_20px_4px]">
       <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <div className="text-xs text-gray-200 font-medium">{currentLanguage.personality.name}</div>
+          <div className="text-xs text-gray-700 font-medium">{currentLanguage.personality.name}</div>
           {/* Audio button - only show for non-error messages with non-English content */}
           {!message.isError && message.content && (
             (message.content.characters && Array.isArray(message.content.characters) && message.content.characters.length > 0) ||
@@ -178,7 +178,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
         </div>
 
         {message.isError ? (
-          <div className="text-red-300 text-sm">
+          <div className="text-red-600 text-sm">
             {message.content || 'Sorry, something went wrong. Please try again.'}
           </div>
         ) : (
@@ -211,7 +211,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
             {/* Text display (for languages without character breakdown) */}
             {message.content.text && !message.content.characters && (
               <div className="message-content">
-                <p className={`text-white ${getLanguageTextClass(currentLanguage.code)}`}>
+                <p className={`text-gray-800 ${getLanguageTextClass(currentLanguage.code)}`}>
                   {message.content.text}
                 </p>
                 {showRomanization && message.content.romanization && (
@@ -254,27 +254,29 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
               </div>
             )}
 
-            {message.content.culturalContext && (
-              <button
-                onClick={() => updateUiState({ culturalContextModal: message.content.culturalContext })}
-                className="inline-flex items-center text-xs text-gray-200 transition-colors cursor-pointer"
-              >
-                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Cultural Context
-              </button>
+            {/* English translation */}
+            {showEnglish && message.content.english && (
+              <div className="mt-2 pt-2 border-t border-gray-300">
+                <p className="text-sm text-gray-600 italic">{message.content.english}</p>
+              </div>
             )}
 
-            {showEnglish && message.content.english && (
-              <div className="pt-3 border-t border-gray-600">
-                <p className="text-sm sm:text-base text-gray-300 leading-relaxed message-content">
-                  {message.content.english}
-                </p>
+            {/* Cultural context button */}
+            {message.content.cultural_context && (
+              <div className="mt-2 pt-2 border-t border-gray-300">
+                <button
+                  onClick={() => updateUiState({ culturalContextModal: message.content.cultural_context })}
+                  className="inline-flex items-center text-xs text-amber-600 transition-colors cursor-pointer"
+                >
+                  <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Cultural context
+                </button>
               </div>
             )}
           </>
@@ -287,20 +289,16 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
 const TypingIndicator = ({ currentLanguage }) => (
   <div className="flex w-full justify-start items-end mb-3">
     <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentLanguage.personality.color} flex items-center justify-center mr-2 mb-1 glass-surface`}>
-      <span className="text-white text-sm">{currentLanguage.personality.avatar}</span>
+      <span className="text-gray-800 text-sm font-medium">{currentLanguage.personality.avatar}</span>
     </div>
-    <div className="max-w-[85%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-assistant text-white rounded-[20px_20px_20px_4px]">
-      <div className="text-xs text-gray-300 font-medium mb-2">{currentLanguage.personality.name}</div>
-      <div className="flex space-x-1">
-        <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce"></div>
-        <div
-          className="w-2 h-2 bg-white/60 rounded-full animate-bounce"
-          style={{ animationDelay: '0.1s' }}
-        ></div>
-        <div
-          className="w-2 h-2 bg-white/60 rounded-full animate-bounce"
-          style={{ animationDelay: '0.2s' }}
-        ></div>
+    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-assistant text-gray-800 rounded-[20px_20px_20px_4px]">
+      <div className="flex items-center space-x-1">
+        <div className="text-xs text-gray-700 font-medium mr-2">{currentLanguage.personality.name}</div>
+        <div className="flex space-x-1">
+          <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce"></div>
+          <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+          <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        </div>
       </div>
     </div>
   </div>

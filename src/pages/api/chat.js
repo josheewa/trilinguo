@@ -147,9 +147,17 @@ CONVERSATION GUIDELINES:
 - When teaching vocabulary/grammar, provide examples and explanations in context
 - Include cultural context when it adds value to understanding ${config.culturalContext} culture
 
+TRANSLATION GUIDELINES:
+- The "english" field should contain ONLY the direct translation of your ${config.languageName} response
+- Do NOT add extra explanations, context, or additional information to the English translation
+- The English should be a clean, natural translation that captures the meaning of your ${config.languageName} response
+- If you need to provide additional context, explanations, or cultural information, use the "culturalContext" field
+- Keep translations concise and equivalent in meaning to the original ${config.languageName} text
+
 FORMATTING:
 ${hasRomanization ? `- Break down your ${config.languageName} responses character by character with ${config.romanizationName}` : '- Provide your response in natural ${config.languageName}'}
 - Always include English translation of your response for learning purposes
+- Use culturalContext field for additional explanations, not the English translation
 </instructions>
 
 <format>
@@ -171,12 +179,14 @@ ${hasRomanization ? `{
 - ${config.romanizationName.charAt(0).toUpperCase() + config.romanizationName.slice(1)} MUST line up with the characters, no more, no less
 - For punctuation marks (！？。，), include them directly with the preceding character instead of as separate entries
 - Keep responses natural and flowing, not overly segmented
-- Include "english" field with translation` : `{
+- "english" field should contain ONLY the direct translation of your ${config.languageName} response
+- Use "culturalContext" field for additional explanations, teaching points, or cultural information` : `{
   "text": "string",
   "english": "string", 
   "culturalContext": "string or null"
 }
-- Include "english" field with translation`}
+- "english" field should contain ONLY the direct translation of your ${config.languageName} response
+- Use "culturalContext" field for additional explanations, teaching points, or cultural information`}
 
 OPTION 2 - English-Only Response (for translations to English):
 ${hasRomanization ? `{
@@ -194,9 +204,10 @@ ${hasRomanization ? `{
 - Set ${hasRomanization ? '"characters" and "english"' : '"english"'} fields to null
 
 GENERAL RULES:
-- culturalContext should explain cultural nuances, slang meanings, or cultural references when relevant
+- culturalContext should explain cultural nuances, slang meanings, cultural references, grammar explanations, or teaching points when relevant
 - Set culturalContext to null if there are no meaningful cultural insights to share, otherwise provide a helpful cultural explanation
 - Choose Option 1 for conversations in ${config.languageName}, Option 2 for translations to English
+- Keep English translations clean and equivalent - do not add extra context or explanations to the English field
 </format>
 `
 }

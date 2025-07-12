@@ -26,19 +26,19 @@ export default function SettingsMenu({
       ></div>
       <div
         ref={mobileMenuRef}
-        className={`h-full w-80 max-w-[90vw] glass-panel border-l border-white/30 transition-transform duration-500 ease-in-out z-[101] ${
+        className={`h-full w-80 max-w-[90vw] glass-panel border-l border-black/30 transition-transform duration-500 ease-in-out z-[101] ${
           uiState.showMobileMenu ? 'settings-panel-open' : 'settings-panel-closed'
         }`}
       >
-        <div className="p-4 border-b border-white/20">
+        <div className="p-4 border-b border-black/20">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">Settings</h2>
+            <h2 className="text-lg font-semibold text-gray-800">Settings</h2>
             <button
               onClick={() => updateUiState({ showMobileMenu: false })}
               className="glass-button p-2 rounded-xl cursor-pointer"
             >
               <svg
-                className="w-4 h-4 text-gray-300"
+                className="w-4 h-4 text-gray-700"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -56,7 +56,7 @@ export default function SettingsMenu({
 
         {/* Language Selection */}
         <div className="p-4">
-          <h3 className="text-sm font-medium text-gray-300 mb-3">Choose Language</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Choose Language</h3>
           <div className="space-y-2">
             {Object.values(LANGUAGES).map((lang) => (
               <button
@@ -64,8 +64,8 @@ export default function SettingsMenu({
                 onClick={() => handleLanguageChange(lang.code)}
                 className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 cursor-pointer ${
                   settings.currentLanguage === lang.code
-                    ? 'glass-button-selected text-white'
-                    : 'glass-button text-gray-300'
+                    ? 'glass-button-selected text-gray-800'
+                    : 'glass-button text-gray-700'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -78,12 +78,12 @@ export default function SettingsMenu({
         </div>
 
         {/* Settings */}
-        <div className="p-4 border-t border-white/20">
-          <h3 className="text-sm font-medium text-gray-300 mb-3">Settings</h3>
+        <div className="p-4 border-t border-black/20">
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Settings</h3>
           <div className="space-y-3">
             {/* English Toggle */}
             <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3 cursor-pointer">
-              <span className="text-sm text-gray-200 font-medium">Show English</span>
+              <span className="text-sm text-gray-700 font-medium">Show English</span>
               <button
                 onClick={() => updateSettings({ showEnglish: !showEnglish })}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 cursor-pointer ${
@@ -106,7 +106,7 @@ export default function SettingsMenu({
             {/* Romanization Toggle - only show if current language supports it */}
             {currentLanguage.hasRomanization && (
               <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3 cursor-pointer">
-                <span className="text-sm text-gray-200 font-medium">Show {currentLanguage.romanizationLabel}</span>
+                <span className="text-sm text-gray-700 font-medium">Show {currentLanguage.romanizationLabel}</span>
                 <button
                   onClick={() => updateSettings({ showRomanization: !showRomanization })}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 cursor-pointer ${
@@ -128,7 +128,7 @@ export default function SettingsMenu({
             )}
 
             <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3 cursor-pointer">
-              <span className="text-sm text-gray-200 font-medium">Predictive Text</span>
+              <span className="text-sm text-gray-700 font-medium">Predictive Text</span>
               <button
                 onClick={() =>
                   updateSettings({ enablePredictiveText: !settings.enablePredictiveText })

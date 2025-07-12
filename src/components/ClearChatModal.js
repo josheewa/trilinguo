@@ -6,7 +6,7 @@ export default function ClearChatModal({ isOpen, onClose, onConfirm, currentLang
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center">
       <div className="glass-overlay fixed inset-0" onClick={onClose}></div>
-      <div className="relative glass-modal border border-white/20 rounded-2xl max-w-sm mx-4 w-full">
+      <div className="relative glass-modal border border-black/20 rounded-2xl max-w-sm mx-4 w-full">
         <div className="p-6">
           <div className="flex items-center mb-4">
             <div className="w-10 h-10 glass-error rounded-full flex items-center justify-center mr-3">
@@ -24,13 +24,13 @@ export default function ClearChatModal({ isOpen, onClose, onConfirm, currentLang
                 ></path>
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-white">Clear Chat History</h3>
+            <h3 className="text-lg font-semibold text-gray-800">Clear Chat History</h3>
           </div>
 
           <div className="glass-surface-subtle rounded-xl p-4 mb-6">
-            <p className="text-sm text-gray-200 leading-relaxed">
+            <p className="text-sm text-gray-700 leading-relaxed">
               Are you sure you want to clear all chat history for{' '}
-              <strong className="text-white">{currentLanguageName}</strong>? This action cannot be
+              <strong className="text-gray-800">{currentLanguageName}</strong>? This action cannot be
               undone.
             </p>
           </div>
@@ -38,7 +38,7 @@ export default function ClearChatModal({ isOpen, onClose, onConfirm, currentLang
           <div className="flex space-x-3">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 glass-button text-gray-300 rounded-xl text-sm font-medium cursor-pointer"
+              className="flex-1 px-4 py-2.5 glass-button text-gray-700 rounded-xl text-sm font-medium cursor-pointer"
             >
               Cancel
             </button>

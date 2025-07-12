@@ -15,12 +15,10 @@ export default function Header({
 }) {
   return (
     <>
-    <header className={`flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 glass-nav border-b border-white/10 z-10`}>
+    <header className={`flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 glass-nav border-b border-black/10 z-10`}>
       <div className="flex items-center space-x-2 sm:space-x-3">
-        <div className="w-6 h-6 sm:w-8 sm:h-8 glass-logo rounded-full flex items-center justify-center">
-          <span className="text-white font-bold text-xs sm:text-sm">T</span>
-        </div>
-        <h1 className="text-lg sm:text-xl font-semibold">Trilinguo</h1>
+        <img src="/favicon.svg" alt="Trilinguo Logo" className="w-6 h-6 sm:w-8 sm:h-8 glass-logo rounded-full" />
+        <h1 className="text-lg sm:text-xl font-semibold text-gray-800">Trilinguo</h1>
 
         {/* Language Dropdown - Desktop */}
         <div className="hidden sm:block" ref={languageDropdownRef}>
@@ -28,8 +26,8 @@ export default function Header({
             onClick={() => updateUiState({ showLanguageDropdown: !uiState.showLanguageDropdown })}
             className="glass-button-light flex items-center space-x-1 px-3 py-2 rounded-xl cursor-pointer"
           >
-            <span className="text-sm text-gray-200">{currentLanguage.displayName}</span>
-            <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="text-sm text-gray-700">{currentLanguage.displayName}</span>
+            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
@@ -45,7 +43,7 @@ export default function Header({
             className={`px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 cursor-pointer ${
               showRomanization
                 ? 'glass-button-emerald-light text-white'
-                : 'glass-button-light text-gray-200'
+                : 'glass-button-light text-gray-700'
             }`}
           >
             {currentLanguage.romanizationLabel}
@@ -57,7 +55,7 @@ export default function Header({
           className={`px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 cursor-pointer ${
             showEnglish
               ? 'glass-button-blue-light text-white'
-              : 'glass-button-light text-gray-200'
+              : 'glass-button-light text-gray-700'
           }`}
         >
           EN
@@ -87,10 +85,10 @@ export default function Header({
           onClick={() => updateUiState({ showMobileMenu: true })}
           className="glass-button-light flex items-center sm:space-x-2 p-2 rounded-xl cursor-pointer"
         >
-          <svg className="w-4 h-4 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
-          <span className="hidden sm:inline text-sm text-gray-200 font-medium">Settings</span>
+          <span className="hidden sm:inline text-sm text-gray-700 font-medium">Settings</span>
         </button>
       </div>
 
@@ -109,15 +107,15 @@ export default function Header({
           <button
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
-            className={`w-full text-left px-5 py-3 transition-all duration-200 first:rounded-t-xl last:rounded-b-xl cursor-pointer relative overflow-hidden hover:bg-white/5 ${
+            className={`w-full text-left px-5 py-3 transition-all duration-200 first:rounded-t-xl last:rounded-b-xl cursor-pointer relative overflow-hidden hover:bg-black/5 ${
               currentLanguage.code === lang.code
-                ? 'text-blue-300'
-                : 'text-gray-200'
+                ? 'text-blue-600'
+                : 'text-gray-700'
             }`}
           >
             <div className="flex items-center justify-between gap-4 relative z-10">
               <span className="whitespace-nowrap">{lang.name}</span>
-              <span className="text-xs text-gray-400 whitespace-nowrap">{lang.displayName}</span>
+              <span className="text-xs text-gray-500 whitespace-nowrap">{lang.displayName}</span>
             </div>
           </button>
         ))}

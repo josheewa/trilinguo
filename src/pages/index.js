@@ -457,7 +457,7 @@ export default function Home() {
       
 
       {/* Main App Container - Pure Tailwind */}
-      <div className="h-screen flex flex-col overflow-hidden overscroll-none text-white">
+      <div className="h-screen flex flex-col overflow-hidden overscroll-none text-gray-800">
         {/* Background */}
         <div className={`absolute inset-0 liquid-bg-primary`}>
           <div className="liquid-bg-overlay absolute inset-0"></div>

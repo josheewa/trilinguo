@@ -31,10 +31,10 @@ export default function ChatInput({
                     setSuggestions([])
                     inputRef.current?.focus()
                   }}
-                  className="glass-button px-3 py-1.5 text-gray-200 text-xs rounded-full cursor-pointer flex items-baseline"
+                  className="glass-button px-3 py-1.5 text-gray-700 text-xs rounded-full cursor-pointer flex items-baseline"
                 >
                   <span className="opacity-60 whitespace-pre-wrap">{input}</span>
-                  <span className="font-medium text-blue-300 whitespace-pre-wrap">
+                  <span className="font-medium text-blue-600 whitespace-pre-wrap">
                     {remainingPart}
                   </span>
                 </button>
@@ -71,7 +71,7 @@ export default function ChatInput({
                 }
               }}
               placeholder="Say something..."
-              className="w-full bg-transparent text-white placeholder-gray-300 resize-none border-none outline-none text-sm leading-relaxed min-h-[32px] max-h-[240px]"
+              className="w-full bg-transparent text-gray-800 placeholder-gray-500 resize-none border-none outline-none text-sm leading-relaxed min-h-[32px] max-h-[240px]"
               rows="1"
               style={{
                 height: '32px',
