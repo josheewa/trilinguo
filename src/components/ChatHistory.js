@@ -16,6 +16,24 @@ const getLanguageTextClass = (languageCode) => {
   }
 }
 
+// Helper function to determine if character should show romanization
+// Only show for actual language characters, not punctuation or English
+const shouldShowRomanization = (text, languageCode) => {
+  if (!text || !text.trim()) return false
+  
+  // Language-specific regex for characters that typically have romanization
+  const regexMap = {
+    'zh-tw': /[\u4e00-\u9fff]/,  // Chinese characters
+    'zh-cn': /[\u4e00-\u9fff]/,   // Chinese characters
+    'ja': /[\u3040-\u30ff\u4e00-\u9faf]/,  // Hiragana, Katakana, Kanji
+    'ko': /[\uac00-\ud7af]/,      // Hangul syllables
+    'fr': /.*/                    // French doesn't use romanization
+  }
+  
+  const regex = regexMap[languageCode] || /.*/
+  return regex.test(text)
+}
+
 const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => {
   const { playAudio, stopAudio, isLoading, isPlaying, getError } = audioControls
   const loading = isLoading(messageId)
@@ -195,7 +213,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
                         : 'character-without-pinyin'
                     }
                   >
-                    {(obj.romanization || obj.pinyin) && showRomanization && obj.text.trim() && (
+                    {(obj.romanization || obj.pinyin) && showRomanization && shouldShowRomanization(obj.text, currentLanguage.code) && (
                       <span className="pinyin-text">
                         {obj.romanization || obj.pinyin}
                       </span>
