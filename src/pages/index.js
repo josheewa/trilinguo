@@ -541,7 +541,7 @@ export default function Home() {
           />
           
           {/* Disclaimer */}
-          <div className="max-w-4xl mx-auto w-full px-4 pb-2 sm:px-6 pb-0 relative z-20">
+          <div className="max-w-4xl mx-auto w-full px-4 pb-2 sm:px-6 relative z-20">
             <div className="text-center">
               <p className="text-base text-gray-700">
                 Chats are stored locally and may disappear if you clear your browser data.
