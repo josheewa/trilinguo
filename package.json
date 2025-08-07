@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.29.0",
     "next": "15.3.4",
     "openai": "^5.7.0",
     "react": "^19.0.0",

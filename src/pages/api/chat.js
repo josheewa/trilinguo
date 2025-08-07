@@ -2,6 +2,7 @@ import OpenAI from 'openai'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { zodResponseFormat } from 'openai/helpers/zod'
+import { auth } from '@clerk/nextjs/server'
 
 const client = new OpenAI()
 export const runtime = 'edge'
@@ -214,6 +215,12 @@ GENERAL RULES:
 
 export default async function POST(req, res) {
   try {
+    // Check authentication
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const { messages, language = 'zh-tw', personality } = await req.json()
     
     if (!personality) {

@@ -1,5 +1,4 @@
 export const StorageKeys = {
-  AUTH: 'trilinguo-auth',
   SETTINGS: 'trilinguo-settings',
   CHAT_PREFIX: 'trilinguo-chat-',
 }

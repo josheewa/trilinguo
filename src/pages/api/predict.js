@@ -1,5 +1,6 @@
 import OpenAI from 'openai'
 import { NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 
 const client = new OpenAI()
 export const runtime = 'edge'
@@ -14,6 +15,12 @@ const LANGUAGES = {
 
 export default async function POST(req) {
   try {
+    // Check authentication
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const { input, language = 'zh-tw', context = [], count = 3 } = await req.json()
 
     // Only predict for inputs with 2+ characters and less than 80 characters

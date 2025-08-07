@@ -1,5 +1,6 @@
 import OpenAI from 'openai'
 import { NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 import { z } from 'zod'
 import { zodResponseFormat } from 'openai/helpers/zod'
 
@@ -53,6 +54,12 @@ const getTranslationFocusedFallbacks = (count) => {
 
 export default async function POST(req, res) {
   try {
+    // Check authentication
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const { language = 'zh-tw', count = 4 } = await req.json()
     
     const config = STARTER_GENERATION_PROMPTS[language] || STARTER_GENERATION_PROMPTS['zh-tw']

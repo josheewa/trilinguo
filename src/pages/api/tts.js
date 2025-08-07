@@ -1,5 +1,6 @@
 import OpenAI from 'openai'
 import { NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 
 const client = new OpenAI()
 export const runtime = 'edge'
@@ -33,6 +34,12 @@ const extractTextForTTS = (messageContent, language) => {
 
 export default async function POST(req) {
   try {
+    // Check authentication
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const { messageContent, language = 'zh-tw' } = await req.json()
     
     if (!messageContent) {

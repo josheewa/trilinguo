@@ -1,9 +1,10 @@
+import { ClerkProvider } from '@clerk/nextjs'
 import '@/styles/globals.css'
 import Head from 'next/head'
 
 export default function App({ Component, pageProps }) {
   return (
-    <>
+    <ClerkProvider>
       <Head>
         <title>Trilinguo</title>
         <meta name="description" content="Trilinguo is a chat duolingo app." />
@@ -14,6 +15,6 @@ export default function App({ Component, pageProps }) {
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </Head>
       <Component {...pageProps} />
-    </>
+    </ClerkProvider>
   )
 }

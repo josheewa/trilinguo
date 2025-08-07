@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useUser, useAuth, SignIn, SignUp } from '@clerk/nextjs'
 import { LANGUAGES } from '../config/languages'
 import { defaultSettings } from '../config/settings'
 import {
@@ -8,8 +9,6 @@ import {
   loadChatHistory,
   saveChatHistory,
   clearChatHistory,
-  loadAuth,
-  saveAuth,
 } from '../lib/storage'
 import Header from '../components/Header'
 import SettingsMenu from '../components/SettingsMenu'
@@ -43,9 +42,9 @@ const parseMessageContent = (msg, currentLanguageName) => {
 }
 
 export default function Home() {
-  // Authentication state
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [passwordInput, setPasswordInput] = useState('')
+  // Clerk authentication
+  const { isSignedIn, isLoaded } = useUser()
+  const { signOut } = useAuth()
 
   // Core app state
   const [settings, setSettings] = useState(defaultSettings)
@@ -105,16 +104,10 @@ export default function Home() {
 
   // Initialize app on mount
   useEffect(() => {
-    if (loadAuth()) {
-      setIsAuthenticated(true)
-    }
-
     const loadedSettings = loadSettings()
     setSettings(loadedSettings)
     setMessages(loadChatHistory(loadedSettings.currentLanguage))
   }, [])
-
-
 
   // Scroll when new messages are added or typing indicator appears
   useEffect(() => {
@@ -148,10 +141,10 @@ export default function Home() {
 
   // Load conversation starters when language changes
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isSignedIn) {
       loadConversationStarters()
     }
-  }, [settings.currentLanguage, isAuthenticated, loadConversationStarters])
+  }, [settings.currentLanguage, isSignedIn, loadConversationStarters])
 
   // Save chat history when messages change
   useEffect(() => {
@@ -310,17 +303,9 @@ export default function Home() {
     await handleSubmit(syntheticEvent, null, starter)
   }
 
-  // Password authentication
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault()
-    if (passwordInput === 'trilinguo2024') {
-      setIsAuthenticated(true)
-      saveAuth()
-      setPasswordInput('')
-    } else {
-      alert('Incorrect password')
-      setPasswordInput('')
-    }
+  // Handle sign out
+  const handleSignOut = () => {
+    signOut()
   }
 
   // Main chat submission handler
@@ -410,7 +395,17 @@ export default function Home() {
     updateUiState({ isLoading: false, retryingMessageIndex: null })
   }
 
-  if (!isAuthenticated) {
+  // Show loading state while Clerk is initializing
+  if (!isLoaded) {
+    return (
+      <div className="flex items-center justify-center h-screen liquid-bg-primary">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    )
+  }
+
+  // Show authentication screen if not signed in
+  if (!isSignedIn) {
     return (
       <div className="flex items-center justify-center h-screen liquid-bg-primary">
         {/* Liquid Glass Background Effects */}
@@ -420,32 +415,37 @@ export default function Home() {
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 liquid-orb-purple liquid-pulse-2"></div>
         </div>
         
-        <form
-          onSubmit={handlePasswordSubmit}
-          className="relative z-10 p-8 glass-card rounded-2xl w-full max-w-sm liquid-float"
-        >
-          <div className="text-center mb-6">
-            <div className="w-12 h-12 glass-button-primary rounded-full flex items-center justify-center mx-auto mb-3">
-              <span className="text-white font-bold text-xl">T</span>
-            </div>
-            <h2 className="text-xl text-white font-semibold">Enter Access Code</h2>
-          </div>
-          
-          <input
-            type="password"
-            value={passwordInput}
-            onChange={(e) => setPasswordInput(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl glass-input text-white placeholder-gray-400 focus:outline-none"
-            placeholder="Password"
-            autoFocus
-          />
-          <button
-            type="submit"
-            className="w-full mt-4 px-4 py-3 glass-button-primary text-white rounded-xl font-medium"
-          >
-            Enter
-          </button>
-        </form>
+        <SignIn 
+          routing="hash"
+          appearance={{
+            elements: {
+              formButtonPrimary: 'glass-button-primary text-white rounded-xl font-medium',
+              card: 'bg-transparent shadow-none',
+              headerTitle: 'text-white',
+              headerSubtitle: 'text-gray-300',
+              formFieldInput: 'glass-input text-white placeholder-gray-400 focus:outline-none rounded-xl',
+              formFieldLabel: 'text-white',
+              footerActionLink: 'text-blue-300 hover:text-blue-200',
+              dividerLine: 'bg-gray-600',
+              dividerText: 'text-gray-300',
+              socialButtonsBlockButton: 'glass-button-secondary text-white rounded-xl',
+              formFieldInputShowPasswordButton: 'text-gray-400',
+              formResendCodeLink: 'text-blue-300 hover:text-blue-200',
+              identityPreviewEditButton: 'text-blue-300 hover:text-blue-200',
+              formFieldAction: 'text-blue-300 hover:text-blue-200',
+              footerAction: 'text-gray-300',
+              formFieldLabelRow: 'text-gray-300',
+              formFieldHintText: 'text-gray-400',
+              alertText: 'text-red-300',
+              alert: 'bg-red-900/20 border-red-500/50',
+              alertIcon: 'text-red-400',
+              formFieldErrorText: 'text-red-300',
+              formFieldError: 'border-red-500',
+              formFieldSuccessText: 'text-green-300',
+              formFieldSuccess: 'border-green-500',
+            }
+          }}
+        />
       </div>
     )
   }

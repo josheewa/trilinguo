@@ -1,4 +1,5 @@
 import React from 'react'
+import { useUser, useAuth } from '@clerk/nextjs'
 import { LANGUAGES } from '../config/languages'
 
 export default function Header({
@@ -13,6 +14,13 @@ export default function Header({
   handleLanguageChange,
   languageDropdownRef,
 }) {
+  const { user } = useUser()
+  const { signOut } = useAuth()
+
+  const handleSignOut = () => {
+    signOut()
+  }
+
   return (
     <>
     <header className={`flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 glass-nav border-b border-black/10 z-10`}>
@@ -79,6 +87,30 @@ export default function Header({
             <span>Clear</span>
           </button>
         )}
+
+        {/* User Menu - Desktop */}
+        <div className="hidden sm:flex items-center space-x-2">
+          <div className="flex items-center space-x-2 px-3 py-2 rounded-xl glass-button-light">
+            <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
+              <span className="text-white text-xs font-medium">
+                {user?.firstName?.charAt(0) || user?.emailAddresses?.[0]?.emailAddress?.charAt(0) || 'U'}
+              </span>
+            </div>
+            <span className="text-xs text-gray-700 font-medium hidden lg:inline">
+              {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'User'}
+            </span>
+          </div>
+          
+          <button
+            onClick={handleSignOut}
+            className="px-3 py-2 rounded-xl text-xs font-medium glass-button-red-light text-white transition-all duration-200 cursor-pointer"
+            title="Sign Out"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+          </button>
+        </div>
 
         {/* Settings Menu Button - Both Desktop and Mobile */}
         <button

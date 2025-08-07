@@ -42,21 +42,4 @@ export const clearChatHistory = (languageCode) => {
   } catch (error) {
     console.error('Error clearing chat history:', error)
   }
-}
-
-export const loadAuth = () => {
-  try {
-    return localStorage.getItem(StorageKeys.AUTH) === 'authenticated'
-  } catch (error) {
-    console.error('Error loading auth status:', error)
-    return false
-  }
-}
-
-export const saveAuth = () => {
-  try {
-    localStorage.setItem(StorageKeys.AUTH, 'authenticated')
-  } catch (error) {
-    console.error('Error saving auth status:', error)
-  }
 } 

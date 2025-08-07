@@ -1,4 +1,5 @@
 import React from 'react'
+import { useUser, useAuth } from '@clerk/nextjs'
 import { LANGUAGES } from '../config/languages'
 
 export default function SettingsMenu({
@@ -14,6 +15,13 @@ export default function SettingsMenu({
   showRomanization,
   showEnglish,
 }) {
+  const { user } = useUser()
+  const { signOut } = useAuth()
+
+  const handleSignOut = () => {
+    signOut()
+  }
+
   return (
     <div
       className={`fixed inset-0 z-[100] transition-opacity duration-300 ${
@@ -51,6 +59,25 @@ export default function SettingsMenu({
                 ></path>
               </svg>
             </button>
+          </div>
+        </div>
+
+        {/* User Info */}
+        <div className="p-4 border-b border-black/20">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+              <span className="text-white text-sm font-medium">
+                {user?.firstName?.charAt(0) || user?.emailAddresses?.[0]?.emailAddress?.charAt(0) || 'U'}
+              </span>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-800">
+                {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'User'}
+              </p>
+              <p className="text-xs text-gray-500">
+                {user?.emailAddresses?.[0]?.emailAddress || 'user@example.com'}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -174,6 +201,26 @@ export default function SettingsMenu({
               </button>
             )}
           </div>
+        </div>
+
+        {/* Account Actions */}
+        <div className="p-4 border-t border-black/20 mt-auto">
+          <button
+            onClick={handleSignOut}
+            className="w-full text-left px-4 py-3 rounded-xl glass-error text-red-200 transition-all duration-200 cursor-pointer"
+          >
+            <div className="flex items-center">
+              <svg
+                className="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              Sign Out
+            </div>
+          </button>
         </div>
       </div>
     </div>
