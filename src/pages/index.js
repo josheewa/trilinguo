@@ -54,6 +54,7 @@ export default function Home() {
   // UI state - consolidated for better management
   const [uiState, setUiState] = useState({
     showLanguageDropdown: false,
+    showUserDropdown: false,
     showMobileMenu: false,
     showClearConfirmModal: false,
     culturalContextModal: null,
@@ -86,6 +87,7 @@ export default function Home() {
   const closeAllDropdowns = useCallback(() => {
     updateUiState({
       showLanguageDropdown: false,
+      showUserDropdown: false,
       showMobileMenu: false,
     })
   }, [updateUiState])
@@ -163,6 +165,11 @@ export default function Home() {
         if (!dropdownMenu || !dropdownMenu.contains(event.target)) {
           updateUiState({ showLanguageDropdown: false })
         }
+      }
+      // Check if click is outside user dropdown
+      const userDropdown = document.querySelector('[data-user-dropdown]')
+      if (userDropdown && !userDropdown.contains(event.target)) {
+        updateUiState({ showUserDropdown: false })
       }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
         updateUiState({ showMobileMenu: false })
@@ -417,6 +424,7 @@ export default function Home() {
         
         <SignIn 
           routing="hash"
+          hideDevelopmentModeMessage={true}
           appearance={{
             elements: {
               formButtonPrimary: 'glass-button-primary text-white rounded-xl font-medium',
@@ -495,27 +503,29 @@ export default function Home() {
           showEnglish={showEnglish}
         />
 
-        {/* Chat Content - Scrollable */}
-        <div className={`flex-1 overflow-y-auto overscroll-contain px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4 relative z-10 max-w-4xl mx-auto w-full`}>
-          {messages.length === 0 ? (
-            <WelcomeScreen
-              currentLanguage={currentLanguage}
-              loadingStarters={loadingStarters}
-              conversationStarters={conversationStarters}
-              handleStarterClick={handleStarterClick}
-            />
-          ) : (
-            <ChatHistory
-              messages={messages}
-              uiState={uiState}
-              currentLanguage={currentLanguage}
-              showRomanization={showRomanization}
-              showEnglish={showEnglish}
-              handleSubmit={handleSubmit}
-              updateUiState={updateUiState}
-              messagesEndRef={messagesEndRef}
-            />
-          )}
+        {/* Chat Content - Scrollable with proper edge handling */}
+        <div className="flex-1 overflow-y-auto overscroll-contain relative z-10">
+          <div className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-4 sm:py-6">
+            {messages.length === 0 ? (
+              <WelcomeScreen
+                currentLanguage={currentLanguage}
+                loadingStarters={loadingStarters}
+                conversationStarters={conversationStarters}
+                handleStarterClick={handleStarterClick}
+              />
+            ) : (
+              <ChatHistory
+                messages={messages}
+                uiState={uiState}
+                currentLanguage={currentLanguage}
+                showRomanization={showRomanization}
+                showEnglish={showEnglish}
+                handleSubmit={handleSubmit}
+                updateUiState={updateUiState}
+                messagesEndRef={messagesEndRef}
+              />
+            )}
+          </div>
         </div>
 
         {/* Input - Natural flow at bottom */}
@@ -529,6 +539,15 @@ export default function Home() {
             handleSubmit={handleSubmit}
             inputRef={inputRef}
           />
+          
+          {/* Disclaimer */}
+          <div className="max-w-4xl mx-auto w-full px-4 pb-2 sm:px-6 pb-0 relative z-20">
+            <div className="text-center">
+              <p className="text-base text-gray-700">
+                Chats are stored locally and may disappear if you clear your browser data.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 

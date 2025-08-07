@@ -1,12 +1,12 @@
-# Trilinguo Liquid Glass Design System
+# Trilinguo Minimal Glass Design System
 
 ## Overview
-A comprehensive design system that provides consistent liquid glass styling across all components in the Trilinguo app.
+A clean, minimal design system that provides consistent glass styling across all components in the Trilinguo app with subtle shadows and translucency.
 
 ## Core Classes
 
 ### Background Patterns
-- `.liquid-bg-primary` - Main app background gradient
+- `.liquid-bg-primary` - Main app background gradient (subtle)
 - `.liquid-bg-overlay` - Overlay gradient for depth
 - `.liquid-orb-blue` - Blue floating orb effect
 - `.liquid-orb-purple` - Purple floating orb effect
@@ -17,10 +17,10 @@ A comprehensive design system that provides consistent liquid glass styling acro
 - `.glass-surface-strong` - Strong glass panel (high opacity)
 
 ### Interactive Elements
-- `.glass-button` - Basic interactive glass button
-- `.glass-button-primary` - Primary action button (blue/purple gradient)
-- `.glass-button-secondary` - Secondary action button (emerald gradient)
-- `.glass-button-danger` - Destructive action button (red gradient)
+- `.glass-button` - Basic interactive glass button (consistent 36px height)
+- `.glass-button-primary` - Primary action button (blue accent)
+- `.glass-button-secondary` - Secondary action button (emerald accent)
+- `.glass-button-danger` - Destructive action button (red accent)
 
 ### Form Elements
 - `.glass-input` - Glass-styled input fields with focus states
@@ -52,7 +52,8 @@ A comprehensive design system that provides consistent liquid glass styling acro
 ## Usage Guidelines
 
 ### Consistency
-- Always use the design system classes instead of custom backdrop-blur/bg-white combinations
+- All buttons have consistent sizing: 36px minimum height, 8px padding, 14px font size
+- Use the design system classes instead of custom backdrop-blur/bg-white combinations
 - Maintain the established hierarchy: subtle < surface < strong < panel
 
 ### Interactive States
@@ -65,6 +66,7 @@ A comprehensive design system that provides consistent liquid glass styling acro
 - All glass surfaces include backdrop-blur for depth
 - Border opacity and shadows are calibrated for consistency
 - Focus states are built-in with blue accent colors
+- Subtle hover effects with 1px translateY transform
 
 ### Animations
 - Use `liquid-pulse-1` and `liquid-pulse-2` for background orbs
@@ -75,7 +77,7 @@ A comprehensive design system that provides consistent liquid glass styling acro
 
 ```jsx
 // Access Code Form
-<form className="glass-card rounded-2xl p-8">
+<form className="glass-card rounded-xl p-8">
   <input className="glass-input" />
   <button className="glass-button-primary">Submit</button>
 </form>
@@ -96,4 +98,5 @@ A comprehensive design system that provides consistent liquid glass styling acro
 - **Maintainability**: Centralized styling makes updates easier
 - **Performance**: Reusable classes reduce CSS duplication
 - **Scalability**: Easy to extend for new components
-- **Accessibility**: Built-in focus states and contrast ratios 
+- **Accessibility**: Built-in focus states and contrast ratios
+- **Minimal**: Clean, subtle effects that don't overwhelm the interface 

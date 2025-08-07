@@ -63,8 +63,8 @@ select {
 /* Safari-specific backdrop-filter fix */
 @supports (-webkit-backdrop-filter: blur(10px)) {
   .glass-surface {
-    -webkit-backdrop-filter: blur(24px);
-    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
   }
 }
 
@@ -77,240 +77,258 @@ select {
 }
 
 /* ==========================================================================
-   Liquid Glass Design System
+   Minimal Glass Design System
    ========================================================================== */
 
 .liquid-bg-primary {
-  background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 50%, #ffd3a5 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
   background-size: cover;
   background-attachment: fixed;
 }
 
 .liquid-bg-overlay {
-  @apply bg-gradient-to-br from-slate-200/20 via-transparent to-slate-300/10;
+  @apply bg-gradient-to-br from-slate-100/30 via-transparent to-slate-200/20;
 }
 
-/* Apple Liquid Glass Core */
+/* Minimal Glass Core */
 .glass-surface {
-  @apply backdrop-blur-lg bg-white/[0.03] border border-white/[0.1] shadow-2xl shadow-black/30 relative overflow-hidden;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.04) 0%, transparent 60%),
-    rgba(255, 255, 255, 0.02) !important;
+  @apply backdrop-blur-md bg-white/40 border border-white/60 shadow-sm relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.4) !important;
   box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
-    0 12px 40px rgba(0, 0, 0, 0.35),
-    0 4px 12px rgba(0, 0, 0, 0.2) !important;
-  border-radius: 16px;
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 12px;
 }
 .glass-surface::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(200px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 30%, rgba(255, 255, 255, 0.02) 60%, transparent 80%);
+  background: radial-gradient(200px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 60%);
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.4s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-surface:hover::before { opacity: 1; }
 .glass-surface:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
-    0 16px 50px rgba(0, 0, 0, 0.4),
-    0 8px 20px rgba(0, 0, 0, 0.25) !important;
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.06) !important;
 }
 
-/* Universal Liquid hover effect */
+/* Universal hover effect */
 .liquid-hover {
   @apply relative overflow-hidden;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.3s ease-out;
 }
 .liquid-hover::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(150px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 40%, rgba(255, 255, 255, 0.03) 70%, transparent 90%);
+  background: radial-gradient(150px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 40%, transparent 70%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .liquid-hover:hover::before { opacity: 1; }
 .liquid-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 12px 35px rgba(0, 0, 0, 0.2), 0 6px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
-/* Standard Glass Button */
+/* Consistent Button Sizes */
 .glass-button {
-  @apply backdrop-blur-lg border border-white/[0.08] transition-all duration-300 shadow-lg shadow-black/25 relative overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 60%), rgba(255, 255, 255, 0.015) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 6px 15px rgba(0, 0, 0, 0.2) !important;
-  border-radius: 12px;
+  @apply backdrop-blur-md border border-white/60 transition-all duration-200 shadow-sm relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
 }
 .glass-button::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-button:hover::before { opacity: 1; }
 .glass-button:hover {
-  transform: translateY(-2px);
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 60%), rgba(255, 255, 255, 0.03) !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 12px 30px rgba(0, 0, 0, 0.25), 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06) !important;
 }
 .glass-button:active { transform: scale(0.98) translateY(0); transition: transform 0.1s ease-out; }
 .glass-button:hover { background-color: transparent !important; }
 
 /* Logo */
 .glass-logo {
-  @apply backdrop-blur-lg border border-blue-400/[0.12] transition-all duration-300 shadow-lg shadow-blue-500/25 overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 60%), rgba(59, 130, 246, 0.06) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.15), 0 6px 20px rgba(59, 130, 246, 0.2) !important;
-  border-radius: 12px;
+  @apply backdrop-blur-md border border-blue-400/40 transition-all duration-200 shadow-sm overflow-hidden;
+  background: rgba(59, 130, 246, 0.1) !important;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2) !important;
+  border-radius: 8px;
 }
 .glass-logo::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-logo:hover::before { opacity: 1; }
 .glass-logo:hover {
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 60%), rgba(59, 130, 246, 0.1) !important;
-  border-color: rgba(59, 130, 246, 0.2) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.2), 0 12px 35px rgba(59, 130, 246, 0.3), 0 6px 18px rgba(59, 130, 246, 0.2) !important;
+  background: rgba(59, 130, 246, 0.15) !important;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2), 0 2px 4px rgba(59, 130, 246, 0.1) !important;
 }
 
 /* Primary actions */
 .glass-button-primary {
-  @apply backdrop-blur-lg border border-blue-400/[0.3] transition-all duration-300 shadow-lg shadow-blue-500/40 overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.7) 0%, transparent 60%), rgba(59, 130, 246, 0.5) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.4), 0 6px 20px rgba(59, 130, 246, 0.3) !important;
-  border-radius: 12px;
+  @apply backdrop-blur-md border border-blue-400/60 transition-all duration-200 shadow-sm overflow-hidden;
+  background: rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2) !important;
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e40af !important; /* Dark blue text for better contrast */
 }
 .glass-button-primary::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-button-primary:hover::before { opacity: 1; }
 .glass-button-primary:hover {
-  transform: translateY(-2px);
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.8) 0%, transparent 60%), rgba(59, 130, 246, 0.6) !important;
-  border-color: rgba(59, 130, 246, 0.4) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.5), 0 12px 35px rgba(59, 130, 246, 0.4), 0 6px 18px rgba(59, 130, 246, 0.3) !important;
+  transform: translateY(-1px);
+  background: rgba(59, 130, 246, 0.4) !important;
+  border-color: rgba(59, 130, 246, 0.8) !important;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2), 0 2px 4px rgba(59, 130, 246, 0.1) !important;
 }
 
-/* Other button variants */
+/* Secondary actions */
 .glass-button-secondary, .glass-button-emerald-light {
-  @apply backdrop-blur-lg border border-emerald-400/[0.6] transition-all duration-300 shadow-lg shadow-emerald-500/60 overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.6) 0%, transparent 60%), rgba(16, 185, 129, 0.45) !important;
-  box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.65), 0 6px 25px rgba(16, 185, 129, 0.5) !important;
-  border-radius: 12px;
+  @apply backdrop-blur-md border border-emerald-400/60 transition-all duration-200 shadow-sm overflow-hidden;
+  background: rgba(16, 185, 129, 0.3) !important;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.2) !important;
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #047857 !important; /* Dark emerald text for better contrast */
 }
 .glass-button-secondary::before, .glass-button-emerald-light::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(16, 185, 129, 0.7) 0%, rgba(16, 185, 129, 0.5) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0.1) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-button-secondary:hover::before, .glass-button-emerald-light:hover::before { opacity: 1; }
 .glass-button-secondary:hover, .glass-button-emerald-light:hover {
-  transform: translateY(-2px);
-  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.65) 0%, transparent 60%), rgba(16, 185, 129, 0.5) !important;
-  border-color: rgba(16, 185, 129, 0.7) !important;
-  box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.7), 0 12px 45px rgba(16, 185, 129, 0.6), 0 6px 25px rgba(16, 185, 129, 0.5) !important;
+  transform: translateY(-1px);
+  background: rgba(16, 185, 129, 0.4) !important;
+  border-color: rgba(16, 185, 129, 0.8) !important;
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2), 0 2px 4px rgba(16, 185, 129, 0.1) !important;
 }
 
 .glass-button-blue {
-  @apply backdrop-blur-lg border border-blue-400/[0.1] transition-all duration-300 shadow-lg shadow-blue-500/15 overflow-hidden;
-  background: rgba(59, 130, 246, 0.04) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.1), 0 6px 15px rgba(59, 130, 246, 0.15) !important;
-  border-radius: 12px;
+  @apply backdrop-blur-md border border-blue-400/40 transition-all duration-200 shadow-sm overflow-hidden;
+  background: rgba(59, 130, 246, 0.15) !important;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.1) !important;
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e40af !important; /* Dark blue text for better contrast */
 }
 .glass-button-blue::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.06) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-button-blue:hover::before { opacity: 1; }
 .glass-button-blue:hover {
-  transform: translateY(-2px);
-  background: rgba(59, 130, 246, 0.08) !important;
-  border-color: rgba(59, 130, 246, 0.15) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.15), 0 12px 25px rgba(59, 130, 246, 0.2), 0 6px 12px rgba(59, 130, 246, 0.12) !important;
+  transform: translateY(-1px);
+  background: rgba(59, 130, 246, 0.25) !important;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.15), 0 2px 4px rgba(59, 130, 246, 0.08) !important;
 }
 
 .glass-button-selected {
-  @apply backdrop-blur-lg border border-blue-400/[0.2] shadow-lg shadow-blue-500/20 overflow-hidden;
-  background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.12) 0%, transparent 70%), rgba(59, 130, 246, 0.08) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.18), 0 6px 18px rgba(59, 130, 246, 0.18) !important;
-  border-radius: 12px;
+  @apply backdrop-blur-md border border-blue-400/50 shadow-sm overflow-hidden;
+  background: rgba(59, 130, 246, 0.25) !important;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.15) !important;
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e40af !important; /* Dark blue text for better contrast */
 }
 
 /* Inputs */
 .glass-input {
-  @apply backdrop-blur-lg bg-white/[0.015] border border-white/[0.08] focus:border-white/[0.2] transition-all duration-300 shadow-sm relative overflow-hidden;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 8px rgba(0, 0, 0, 0.12) !important;
+  @apply backdrop-blur-md bg-white/30 border border-white/60 focus:border-blue-400/60 transition-all duration-200 shadow-sm relative overflow-hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
 }
 .glass-input::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 60%, transparent 80%);
+  background: radial-gradient(300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 60%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.4s ease-out;
   pointer-events: none; z-index: 1;
 }
 .glass-input:hover::before, .glass-input:focus::before { opacity: 1; }
 .glass-input:focus {
-  background: rgba(255, 255, 255, 0.025) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+  background: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
 }
 
 /* Cards & Panels */
 .glass-card {
-  @apply backdrop-blur-lg border border-white/[0.1] shadow-2xl shadow-black/30 relative overflow-hidden;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.025) 50%, rgba(255, 255, 255, 0.015) 100%) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.06), 0 20px 50px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.2) !important;
-  border-radius: 16px;
+  @apply backdrop-blur-md border border-white/60 shadow-sm relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 12px;
 }
 .glass-card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 40%, transparent 80%);
+  background: radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.4s ease-out;
   pointer-events: none; z-index: 1;
 }
 .glass-card:hover::before { opacity: 1; }
 .glass-card:hover {
-  transform: translateY(-3px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.08), 0 25px 60px rgba(0, 0, 0, 0.35), 0 12px 25px rgba(0, 0, 0, 0.25) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06) !important;
 }
 
-/* Settings Panel - Clean background, no panel-wide effects */
+/* Settings Panel */
 .glass-panel {
-  @apply backdrop-blur-lg border border-white/[0.2] shadow-2xl shadow-black/20 relative overflow-hidden;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.1) 100%) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.15), 0 20px 50px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(0, 0, 0, 0.1) !important;
-  border-radius: 16px;
+  @apply backdrop-blur-md border border-white/60 shadow-sm relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 12px;
 }
 
-/* Settings Panel Elements - Coordinated hover effect on elements only */
+/* Settings Panel Elements */
 .glass-panel .glass-button,
 .glass-panel .glass-button-selected,
 .glass-panel .glass-surface-subtle,
@@ -326,7 +344,7 @@ select {
   content: '';
   position: absolute; 
   top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%);
+  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%);
   opacity: 0;
   transition: opacity 0.3s ease-out;
   pointer-events: none; 
@@ -351,102 +369,101 @@ select {
 
 /* Chat bubbles */
 .glass-bubble-user {
-  @apply backdrop-blur-lg border border-white/[0.12] shadow-lg shadow-blue-500/20 relative overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 70%), rgba(59, 130, 246, 0.1) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.25), inset 0 -1px 0 rgba(59, 130, 246, 0.1), 0 6px 18px rgba(59, 130, 246, 0.2) !important;
-  border-radius: 20px 20px 4px 20px;
+  @apply backdrop-blur-md border border-blue-400/40 shadow-sm relative overflow-hidden;
+  background: rgba(59, 130, 246, 0.1) !important;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.1) !important;
+  border-radius: 16px 16px 4px 16px;
 }
 .glass-bubble-user::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.08) 60%, transparent 80%);
+  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 60%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-bubble-user:hover::before { opacity: 1; }
 .glass-bubble-assistant {
-  @apply backdrop-blur-lg border border-white/[0.1] shadow-lg shadow-black/20 relative overflow-hidden;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.04) 0%, transparent 60%), rgba(255, 255, 255, 0.025) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 6px 15px rgba(0, 0, 0, 0.2) !important;
-  border-radius: 20px 20px 20px 4px;
+  @apply backdrop-blur-md border border-white/60 shadow-sm relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 16px 16px 16px 4px;
 }
 .glass-bubble-assistant::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 60%, transparent 80%);
+  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 60%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-bubble-assistant:hover::before { opacity: 1; }
 
 /* Dropdowns */
 .glass-dropdown {
-  @apply backdrop-blur-lg border border-white/[0.12] shadow-2xl shadow-black/35 relative overflow-hidden;
-  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.06) 0%, transparent 60%), rgba(255, 255, 255, 0.025) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 25px 50px rgba(0, 0, 0, 0.35), 0 12px 25px rgba(0, 0, 0, 0.2) !important;
-  border-radius: 12px;
+  @apply backdrop-blur-md border border-white/60 shadow-sm relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 8px;
 }
 
-/* Clean dropdown for fixed positioning - no layout interference */
+/* Clean dropdown for fixed positioning */
 .glass-dropdown-fixed {
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.06) 0%, transparent 60%), rgba(255, 255, 255, 0.025) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 25px 50px rgba(0, 0, 0, 0.35), 0 12px 25px rgba(0, 0, 0, 0.2) !important;
-  border-radius: 12px;
-  /* NO position or overflow declarations - these interfere with fixed positioning */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 8px;
 }
 .glass-dropdown::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(200px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.06) 50%, transparent 80%);
+  background: radial-gradient(200px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-dropdown-fixed::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(200px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.06) 50%, transparent 80%);
+  background: radial-gradient(200px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-dropdown:hover::before { opacity: 1; }
 .glass-dropdown-fixed:hover::before { opacity: 1; }
 .glass-dropdown button:hover {
-  background: radial-gradient(200px circle at 50% 50%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 60%, transparent 80%) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
 }
 .glass-dropdown-fixed button:hover {
-  background: radial-gradient(200px circle at 50% 50%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 60%, transparent 80%) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
 }
 
 /* Modals */
 .glass-overlay { 
-  background: rgba(0, 0, 0, 0.4) !important; 
+  background: rgba(0, 0, 0, 0.3) !important; 
 }
 .glass-modal {
-  @apply backdrop-blur-xl border border-white/[0.15] shadow-2xl relative overflow-hidden;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.025) 100%) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.08), 0 50px 100px rgba(0, 0, 0, 0.5), 0 20px 40px rgba(0, 0, 0, 0.3) !important;
-  border-radius: 20px;
+  @apply backdrop-blur-lg border border-white/60 shadow-sm relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 12px;
 }
 .glass-modal::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 50%, transparent 80%);
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.4s ease-out;
   pointer-events: none; z-index: 1;
 }
 .glass-modal:hover::before { opacity: 1; }
 
 /* Orbs & Animations */
-.liquid-orb-blue { @apply bg-blue-500/[0.1] rounded-full blur-2xl; animation: liquid-float 6s ease-in-out infinite; }
-.liquid-orb-purple { @apply bg-purple-500/[0.08] rounded-full blur-2xl; animation: liquid-float 6s ease-in-out infinite 3s; }
+.liquid-orb-blue { @apply bg-blue-500/10 rounded-full blur-2xl; animation: liquid-float 6s ease-in-out infinite; }
+.liquid-orb-purple { @apply bg-purple-500/8 rounded-full blur-2xl; animation: liquid-float 6s ease-in-out infinite 3s; }
 @keyframes liquid-float {
   0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
   33% { transform: translate(12px, -18px) scale(1.08); opacity: 0.9; }
@@ -455,127 +472,141 @@ select {
 
 /* Toggles */
 .glass-toggle-active {
-  @apply backdrop-blur-lg border border-white/[0.12] shadow-lg shadow-emerald-500/20 relative overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 70%), rgba(16, 185, 129, 0.1) !important;
-  box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.2), 0 6px 12px rgba(16, 185, 129, 0.18) !important;
+  @apply backdrop-blur-md border border-emerald-400/60 shadow-sm relative overflow-hidden;
+  background: rgba(34, 197, 94, 0.6) !important;
+  box-shadow: 0 1px 3px rgba(34, 197, 94, 0.2) !important;
 }
 .glass-toggle-active::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.08) 60%, transparent 80%);
+  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(34, 197, 94, 0.3) 0%, rgba(34, 197, 94, 0.15) 60%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1;
 }
 .glass-toggle-active:hover::before { opacity: 1; }
 .glass-toggle-inactive, .glass-toggle-inactive-contrast {
-  @apply backdrop-blur-lg border border-white/[0.08] shadow-lg shadow-black/15 relative overflow-hidden;
-  background: rgba(255, 255, 255, 0.02) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+  @apply backdrop-blur-md border border-gray-300/60 shadow-sm relative overflow-hidden;
+  background: rgba(156, 163, 175, 0.4) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 .glass-toggle-inactive::before, .glass-toggle-inactive-contrast::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 60%, transparent 80%);
+  background: radial-gradient(100px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(156, 163, 175, 0.3) 0%, rgba(156, 163, 175, 0.15) 60%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1;
 }
 .glass-toggle-inactive:hover::before, .glass-toggle-inactive-contrast:hover::before { opacity: 1; }
 
 /* Error & Danger States */
 .glass-error, .glass-button-danger, .glass-button-red-light {
-  @apply backdrop-blur-lg border border-red-400/[0.6] shadow-lg shadow-red-500/60 relative overflow-hidden;
-  background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.6) 0%, transparent 70%), rgba(239, 68, 68, 0.45) !important;
-  box-shadow: inset 0 1px 0 rgba(239, 68, 68, 0.65), 0 6px 25px rgba(239, 68, 68, 0.5) !important;
+  @apply backdrop-blur-md border border-red-400/60 shadow-sm relative overflow-hidden;
+  background: rgba(239, 68, 68, 0.3) !important;
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.1) !important;
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #dc2626 !important; /* Dark red text for better contrast */
 }
 .glass-error::before, .glass-button-danger::before, .glass-button-red-light::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(239, 68, 68, 0.7) 0%, rgba(239, 68, 68, 0.5) 60%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(239, 68, 68, 0.3) 0%, rgba(239, 68, 68, 0.1) 60%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-error:hover::before, .glass-button-danger:hover::before, .glass-button-red-light:hover::before { opacity: 1; }
 .glass-error:hover, .glass-button-danger:hover, .glass-button-red-light:hover {
-  transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 rgba(239, 68, 68, 0.7), 0 12px 45px rgba(239, 68, 68, 0.6), 0 6px 25px rgba(239, 68, 68, 0.5) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.15), 0 2px 4px rgba(239, 68, 68, 0.08) !important;
 }
-.glass-button-danger, .glass-button-red-light { border-radius: 12px; }
 
 /* Subtle Surfaces & Nav */
 .glass-surface-subtle {
-  @apply backdrop-blur-md border border-white/[0.15] shadow-sm shadow-black/10 relative overflow-hidden;
-  background: rgba(255, 255, 255, 0.08) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 8px rgba(0, 0, 0, 0.08) !important;
-  border-radius: 10px;
+  @apply backdrop-blur-sm border border-white/60 shadow-sm relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 8px;
 }
 .glass-surface-subtle::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.06) 60%, transparent 80%);
+  background: radial-gradient(300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 60%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.4s ease-out;
   pointer-events: none; z-index: 1;
 }
 .glass-surface-subtle:hover::before { opacity: 1; }
 .glass-surface-subtle:hover {
   transform: translateY(-1px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 6px 12px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
 }
 
 .glass-nav {
-  @apply backdrop-blur-lg border border-white/[0.08];
-  background: rgba(255, 255, 255, 0.025) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+  @apply backdrop-blur-md border-b border-white/60;
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
 }
 
 /* Light buttons */
 .glass-button-light {
-  @apply backdrop-blur-lg border border-white/[0.2] transition-all duration-300 shadow-lg shadow-black/25 relative overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.12) 0%, transparent 60%), rgba(255, 255, 255, 0.08) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 15px rgba(0, 0, 0, 0.25) !important;
-  border-radius: 12px;
+  @apply backdrop-blur-md border border-white/60 transition-all duration-200 shadow-sm relative overflow-hidden;
+  background: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151 !important; /* Dark gray text for better contrast */
 }
 .glass-button-light::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-button-light:hover::before { opacity: 1; }
 .glass-button-light:hover {
-  transform: translateY(-2px);
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.18) 0%, transparent 60%), rgba(255, 255, 255, 0.12) !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 12px 30px rgba(0, 0, 0, 0.3), 0 6px 15px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.5) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06) !important;
 }
 
 .glass-button-blue-light {
-  @apply backdrop-blur-lg border border-blue-400/[0.6] transition-all duration-300 shadow-lg shadow-blue-500/60 overflow-hidden;
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.6) 0%, transparent 60%), rgba(59, 130, 246, 0.45) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.7), 0 6px 25px rgba(59, 130, 246, 0.5) !important;
-  border-radius: 12px;
+  @apply backdrop-blur-md border border-blue-400/60 transition-all duration-200 shadow-sm overflow-hidden;
+  background: rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.1) !important;
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e40af !important; /* Dark blue text for better contrast */
 }
 .glass-button-blue-light::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.7) 0%, rgba(59, 130, 246, 0.5) 50%, transparent 80%);
+  background: radial-gradient(80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 80%);
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.3s ease-out;
   pointer-events: none; z-index: 1; border-radius: inherit;
 }
 .glass-button-blue-light:hover::before { opacity: 1; }
 .glass-button-blue-light:hover {
-  transform: translateY(-2px);
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.65) 0%, transparent 60%), rgba(59, 130, 246, 0.5) !important;
-  border-color: rgba(59, 130, 246, 0.7) !important;
-  box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.75), 0 12px 45px rgba(59, 130, 246, 0.6), 0 6px 25px rgba(59, 130, 246, 0.5) !important;
+  transform: translateY(-1px);
+  background: rgba(59, 130, 246, 0.4) !important;
+  border-color: rgba(59, 130, 246, 0.8) !important;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.15), 0 2px 4px rgba(59, 130, 246, 0.08) !important;
 }
-
 
 /* High-specificity overrides */
 .settings-panel-closed { position: fixed !important; top: 0 !important; right: 0 !important; transform: translateX(100%) !important; }

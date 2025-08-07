@@ -335,38 +335,36 @@ export default function ChatHistory({
   const audioControls = useAudioCache()
   
   return (
-    <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-4">
-      <div className="max-w-4xl mx-auto">
-        {messages.map((message, index) =>
-          message.role === 'user' ? (
-            <UserMessageBubble
-              key={index}
-              message={message}
-              index={index}
-              messages={messages}
-              uiState={uiState}
-              handleSubmit={handleSubmit}
-              currentLanguage={currentLanguage}
-            />
-          ) : (
-            <AssistantMessageBubble
-              key={index}
-              message={message}
-              index={index}
-              uiState={uiState}
-              currentLanguage={currentLanguage}
-              showRomanization={showRomanization}
-              showEnglish={showEnglish}
-              handleSubmit={handleSubmit}
-              updateUiState={updateUiState}
-              audioControls={audioControls}
-            />
-          )
-        )}
+    <div className="space-y-4">
+      {messages.map((message, index) =>
+        message.role === 'user' ? (
+          <UserMessageBubble
+            key={index}
+            message={message}
+            index={index}
+            messages={messages}
+            uiState={uiState}
+            handleSubmit={handleSubmit}
+            currentLanguage={currentLanguage}
+          />
+        ) : (
+          <AssistantMessageBubble
+            key={index}
+            message={message}
+            index={index}
+            uiState={uiState}
+            currentLanguage={currentLanguage}
+            showRomanization={showRomanization}
+            showEnglish={showEnglish}
+            handleSubmit={handleSubmit}
+            updateUiState={updateUiState}
+            audioControls={audioControls}
+          />
+        )
+      )}
 
-        {uiState.isLoading && <TypingIndicator currentLanguage={currentLanguage} />}
-        <div ref={messagesEndRef} />
-      </div>
+      {uiState.isLoading && <TypingIndicator currentLanguage={currentLanguage} />}
+      <div ref={messagesEndRef} />
     </div>
   )
 } 

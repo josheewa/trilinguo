@@ -10,7 +10,7 @@ export default function ChatInput({
   inputRef,
 }) {
   return (
-    <div className="flex-shrink-0 relative z-10 max-w-4xl mx-auto w-full p-4 chat-input-safe-area" style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom, 24px))' }}>
+    <div className="flex-shrink-0 relative z-10 max-w-4xl mx-auto w-full px-4 pt-4 pb-2">
       {/* Predictive Text Suggestions */}
       {settings.enablePredictiveText &&
         suggestions.length > 0 &&
@@ -47,8 +47,7 @@ export default function ChatInput({
         onSubmit={handleSubmit}
         className="glass-surface rounded-3xl focus-within:border-blue-400/50 focus-within:shadow-lg focus-within:shadow-blue-500/25 transition-all duration-200 p-4"
         style={{ 
-          minHeight: '64px',
-          marginBottom: '8px'
+          minHeight: '64px'
         }}
       >
         <div className="flex items-center gap-3">
@@ -83,10 +82,10 @@ export default function ChatInput({
           <button
             type="submit"
             disabled={!input.trim()}
-            className="w-12 h-12 glass-button-primary disabled:opacity-30 disabled:cursor-not-allowed rounded-2xl transition-all duration-200 flex-shrink-0 flex items-center justify-center group"
+            className="w-10 h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg transition-all duration-200 flex-shrink-0 flex items-center justify-center group shadow-sm"
           >
             <svg
-              className="w-6 h-6 text-white transform group-hover:scale-110 transition-transform"
+              className="w-5 h-5 text-white transform group-hover:scale-110 transition-transform"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

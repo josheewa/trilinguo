@@ -23,18 +23,18 @@ export default function Header({
 
   return (
     <>
-    <header className={`flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 glass-nav border-b border-black/10 z-10`}>
-      <div className="flex items-center space-x-2 sm:space-x-3">
-        <img src="/favicon.svg" alt="Trilinguo Logo" className="w-6 h-6 sm:w-8 sm:h-8 glass-logo rounded-full" />
-        <h1 className="text-lg sm:text-xl font-semibold text-gray-800">Trilinguo</h1>
+    <header className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 glass-nav z-10">
+      <div className="flex items-center space-x-3 sm:space-x-4">
+        <img src="/favicon.svg" alt="Trilinguo Logo" className="w-8 h-8 glass-logo rounded-lg" />
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">Trilinguo</h1>
 
         {/* Language Dropdown - Desktop */}
         <div className="hidden sm:block" ref={languageDropdownRef}>
           <button
             onClick={() => updateUiState({ showLanguageDropdown: !uiState.showLanguageDropdown })}
-            className="glass-button-light flex items-center space-x-1 px-3 py-2 rounded-xl cursor-pointer"
+            className="glass-button flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer"
           >
-            <span className="text-sm text-gray-700">{currentLanguage.displayName}</span>
+            <span className="text-sm font-medium text-gray-700">{currentLanguage.displayName}</span>
             <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
             </svg>
@@ -43,14 +43,14 @@ export default function Header({
       </div>
 
       {/* Menu Controls */}
-      <div className="flex items-center space-x-1 sm:space-x-2">
+      <div className="flex items-center space-x-2 sm:space-x-3">
         {/* Romanization Toggle - only show if current language supports it */}
         {currentLanguage.hasRomanization && (
           <button
             onClick={() => updateSettings({ showRomanization: !showRomanization })}
-            className={`px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 cursor-pointer ${
+            className={`glass-button px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
               showRomanization
-                ? 'glass-button-emerald-light text-white'
+                ? 'glass-button-secondary text-white'
                 : 'glass-button-light text-gray-700'
             }`}
           >
@@ -60,7 +60,7 @@ export default function Header({
 
         <button
           onClick={() => updateSettings({ showEnglish: !showEnglish })}
-          className={`px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 cursor-pointer ${
+          className={`glass-button px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
             showEnglish
               ? 'glass-button-blue-light text-white'
               : 'glass-button-light text-gray-700'
@@ -73,10 +73,10 @@ export default function Header({
         {messages.length > 0 && (
           <button
             onClick={handleClearChat}
-            className="hidden sm:flex items-center space-x-1 px-3 py-2 rounded-xl text-xs font-medium glass-button-red-light text-white transition-all duration-200 cursor-pointer"
+            className="hidden sm:flex items-center space-x-2 glass-button-red-light px-4 py-2 rounded-lg text-sm font-medium text-white transition-all duration-200 cursor-pointer"
             title="Clear Chat History"
           >
-            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -89,35 +89,55 @@ export default function Header({
         )}
 
         {/* User Menu - Desktop */}
-        <div className="hidden sm:flex items-center space-x-2">
-          <div className="flex items-center space-x-2 px-3 py-2 rounded-xl glass-button-light">
-            <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-              <span className="text-white text-xs font-medium">
-                {user?.firstName?.charAt(0) || user?.emailAddresses?.[0]?.emailAddress?.charAt(0) || 'U'}
-              </span>
-            </div>
-            <span className="text-xs text-gray-700 font-medium hidden lg:inline">
-              {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'User'}
-            </span>
-          </div>
-          
+        <div className="hidden sm:block relative" data-user-dropdown>
           <button
-            onClick={handleSignOut}
-            className="px-3 py-2 rounded-xl text-xs font-medium glass-button-red-light text-white transition-all duration-200 cursor-pointer"
-            title="Sign Out"
+            onClick={() => updateUiState({ showUserDropdown: !uiState.showUserDropdown })}
+            className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center cursor-pointer border-2 border-white/60 hover:border-white/80 transition-colors shadow-sm"
           >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-            </svg>
+            <span className="text-white text-base font-medium">
+              {user?.firstName?.charAt(0) || user?.emailAddresses?.[0]?.emailAddress?.charAt(0) || 'U'}
+            </span>
           </button>
+
+          {/* User Dropdown */}
+          {uiState.showUserDropdown && (
+            <div className="absolute right-0 top-full mt-2 w-56 glass-dropdown-fixed z-50">
+              <div className="px-4 py-3 border-b border-white/20">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+                    <span className="text-white text-sm font-medium">
+                      {user?.firstName?.charAt(0) || user?.emailAddresses?.[0]?.emailAddress?.charAt(0) || 'U'}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-gray-700">
+                      {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'User'}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {user?.emailAddresses?.[0]?.emailAddress || 'user@example.com'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={handleSignOut}
+                className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-white/20 transition-colors cursor-pointer flex items-center space-x-3"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                <span>Sign Out</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Settings Menu Button - Both Desktop and Mobile */}
         <button
           onClick={() => updateUiState({ showMobileMenu: true })}
-          className="glass-button-light flex items-center sm:space-x-2 p-2 rounded-xl cursor-pointer"
+          className="glass-button-light flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer"
         >
-          <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
           <span className="hidden sm:inline text-sm text-gray-700 font-medium">Settings</span>
@@ -131,7 +151,7 @@ export default function Header({
       <div 
         className="fixed w-64 glass-dropdown-fixed z-50"
         style={{
-          top: `${languageDropdownRef.current.getBoundingClientRect().bottom + 4}px`,
+          top: `${languageDropdownRef.current.getBoundingClientRect().bottom + 8}px`,
           left: `${languageDropdownRef.current.getBoundingClientRect().left}px`
         }}
       >
@@ -139,9 +159,9 @@ export default function Header({
           <button
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
-            className={`w-full text-left px-5 py-3 transition-all duration-200 first:rounded-t-xl last:rounded-b-xl cursor-pointer relative overflow-hidden hover:bg-black/5 ${
+            className={`w-full text-left px-5 py-3 transition-all duration-200 first:rounded-t-lg last:rounded-b-lg cursor-pointer relative overflow-hidden hover:bg-white/20 ${
               currentLanguage.code === lang.code
-                ? 'text-blue-600'
+                ? 'text-blue-600 font-medium'
                 : 'text-gray-700'
             }`}
           >

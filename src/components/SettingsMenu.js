@@ -34,16 +34,16 @@ export default function SettingsMenu({
       ></div>
       <div
         ref={mobileMenuRef}
-        className={`h-full w-80 max-w-[90vw] glass-panel border-l border-black/30 transition-transform duration-500 ease-in-out z-[101] ${
+        className={`h-full w-80 max-w-[90vw] glass-panel border-l border-white/20 transition-transform duration-500 ease-in-out z-[101] ${
           uiState.showMobileMenu ? 'settings-panel-open' : 'settings-panel-closed'
         }`}
       >
-        <div className="p-4 border-b border-black/20">
+        <div className="p-4 border-b border-white/20">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-800">Settings</h2>
             <button
               onClick={() => updateUiState({ showMobileMenu: false })}
-              className="glass-button p-2 rounded-xl cursor-pointer"
+              className="glass-button p-2 rounded-lg cursor-pointer"
             >
               <svg
                 className="w-4 h-4 text-gray-700"
@@ -63,7 +63,7 @@ export default function SettingsMenu({
         </div>
 
         {/* User Info */}
-        <div className="p-4 border-b border-black/20">
+        <div className="p-4 border-b border-white/20">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
               <span className="text-white text-sm font-medium">
@@ -89,7 +89,7 @@ export default function SettingsMenu({
               <button
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
-                className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 cursor-pointer ${
+                className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 cursor-pointer ${
                   settings.currentLanguage === lang.code
                     ? 'glass-button-selected text-gray-800'
                     : 'glass-button text-gray-700'
@@ -105,11 +105,11 @@ export default function SettingsMenu({
         </div>
 
         {/* Settings */}
-        <div className="p-4 border-t border-black/20">
+        <div className="p-4 border-t border-white/20">
           <h3 className="text-sm font-medium text-gray-700 mb-3">Settings</h3>
           <div className="space-y-3">
             {/* English Toggle */}
-            <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3 cursor-pointer">
+            <label className="glass-surface-subtle flex items-center justify-between rounded-lg p-3 cursor-pointer">
               <span className="text-sm text-gray-700 font-medium">Show English</span>
               <button
                 onClick={() => updateSettings({ showEnglish: !showEnglish })}
@@ -132,7 +132,7 @@ export default function SettingsMenu({
 
             {/* Romanization Toggle - only show if current language supports it */}
             {currentLanguage.hasRomanization && (
-              <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3 cursor-pointer">
+              <label className="glass-surface-subtle flex items-center justify-between rounded-lg p-3 cursor-pointer">
                 <span className="text-sm text-gray-700 font-medium">Show {currentLanguage.romanizationLabel}</span>
                 <button
                   onClick={() => updateSettings({ showRomanization: !showRomanization })}
@@ -154,7 +154,7 @@ export default function SettingsMenu({
               </label>
             )}
 
-            <label className="glass-surface-subtle flex items-center justify-between rounded-xl p-3 cursor-pointer">
+            <label className="glass-surface-subtle flex items-center justify-between rounded-lg p-3 cursor-pointer">
               <span className="text-sm text-gray-700 font-medium">Predictive Text</span>
               <button
                 onClick={() =>
@@ -180,7 +180,7 @@ export default function SettingsMenu({
             {messages.length > 0 && (
               <button
                 onClick={handleClearChat}
-                className="w-full text-left px-4 py-3 rounded-xl glass-error text-red-200 transition-all duration-200 cursor-pointer"
+                className="w-full text-left px-4 py-3 rounded-lg glass-button-red-light text-white transition-all duration-200 cursor-pointer"
               >
                 <div className="flex items-center">
                   <svg
@@ -204,10 +204,10 @@ export default function SettingsMenu({
         </div>
 
         {/* Account Actions */}
-        <div className="p-4 border-t border-black/20 mt-auto">
+        <div className="p-4 border-t border-white/20 mt-auto">
           <button
             onClick={handleSignOut}
-            className="w-full text-left px-4 py-3 rounded-xl glass-error text-red-200 transition-all duration-200 cursor-pointer"
+            className="w-full text-left px-4 py-3 rounded-lg glass-button-red-light text-white transition-all duration-200 cursor-pointer"
           >
             <div className="flex items-center">
               <svg
