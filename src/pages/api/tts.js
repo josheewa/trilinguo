@@ -1,30 +1,24 @@
 import OpenAI from 'openai'
-import { NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { getAuth } from '@clerk/nextjs/server'
 
 const client = new OpenAI()
-export const runtime = 'edge'
 
-// Map language codes to appropriate OpenAI TTS voices
-// Based on voice quality and naturalness for each language
 const VOICE_MAP = {
-  'zh-tw': 'nova',     // Clear, natural female voice - good for Chinese tones
-  'zh-cn': 'alloy',    // Neutral, versatile voice - good for mainland pronunciation  
-  'ja': 'shimmer',     // Soft, clear voice - works well with Japanese pitch accent
-  'ko': 'nova',        // Clear articulation - good for Korean consonant clusters
-  'fr': 'echo',        // Rich, expressive voice - good for French liaisons and rhythm
+  'zh-tw': 'nova',
+  'zh-cn': 'alloy', 
+  'ja': 'shimmer', 
+  'ko': 'nova', 
+  'fr': 'echo', 
 }
 
 // Extract text content from message for TTS
 const extractTextForTTS = (messageContent, language) => {
   if (!messageContent) return ''
   
-  // For languages with characters array (Chinese, Japanese, Korean)
   if (messageContent.characters && Array.isArray(messageContent.characters)) {
     return messageContent.characters.map(char => char.text).join('')
   }
   
-  // For text-based languages (French) or fallback
   if (messageContent.text) {
     return messageContent.text
   }
@@ -32,84 +26,80 @@ const extractTextForTTS = (messageContent, language) => {
   return ''
 }
 
-export default async function POST(req) {
+export default async function handler(req, res) {
   try {
-    // Check authentication
-    const { userId } = await auth()
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (req.method !== 'POST') {
+      res.setHeader('Allow', ['POST'])
+      return res.status(405).json({ error: 'Method Not Allowed' })
     }
 
-    const { messageContent, language = 'zh-tw' } = await req.json()
+    // Check authentication
+    const { userId } = getAuth(req)
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' })
+    }
+
+    const { messageContent, language = 'zh-tw' } = req.body || {}
     
     if (!messageContent) {
-      return NextResponse.json({ error: 'Message content is required' }, { status: 400 })
+      return res.status(400).json({ error: 'Message content is required' })
     }
 
     const textToSpeak = extractTextForTTS(messageContent, language)
     
     if (!textToSpeak.trim()) {
-      return NextResponse.json({ error: 'No text content found to synthesize' }, { status: 400 })
+      return res.status(400).json({ error: 'No text content found to synthesize' })
     }
 
-    // Validate text length (OpenAI TTS has a limit of 4096 characters)
     if (textToSpeak.length > 4000) {
-      return NextResponse.json({ 
+      return res.status(400).json({ 
         error: 'Text too long for synthesis',
         details: 'Maximum 4000 characters supported' 
-      }, { status: 400 })
+      })
     }
 
     const voice = VOICE_MAP[language] || 'alloy'
 
-    // Generate speech using OpenAI TTS
     const mp3Response = await client.audio.speech.create({
-      model: 'tts-1', // Use tts-1 for speed (streaming), tts-1-hd for quality
+      model: 'tts-1',
       voice: voice,
       input: textToSpeak,
       response_format: 'mp3',
     })
 
-    // Convert the response to a buffer
     const audioBuffer = await mp3Response.arrayBuffer()
     
-    // Validate audio response
     if (!audioBuffer || audioBuffer.byteLength === 0) {
       throw new Error('Empty audio response from OpenAI')
     }
     
-    // Return audio as blob with proper headers for caching
-    return new NextResponse(audioBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'audio/mpeg',
-        'Content-Length': audioBuffer.byteLength.toString(),
-        'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
-        'Content-Disposition': 'inline',
-        'X-Audio-Text-Length': textToSpeak.length.toString(), // Debug info
-      },
-    })
+    res.status(200)
+    res.setHeader('Content-Type', 'audio/mpeg')
+    res.setHeader('Content-Length', audioBuffer.byteLength.toString())
+    res.setHeader('Cache-Control', 'public, max-age=3600')
+    res.setHeader('Content-Disposition', 'inline')
+    res.setHeader('X-Audio-Text-Length', textToSpeak.length.toString())
+    return res.end(Buffer.from(audioBuffer))
   } catch (error) {
     console.error('TTS API Error:', error)
     
-    // Provide specific error messages based on error type
     if (error.message?.includes('rate limit')) {
-      return NextResponse.json({ 
+      return res.status(429).json({ 
         error: 'Rate limit exceeded',
         details: 'Please wait a moment before trying again' 
-      }, { status: 429 })
+      })
     }
     
     if (error.message?.includes('quota')) {
-      return NextResponse.json({ 
+      return res.status(503).json({ 
         error: 'Service temporarily unavailable',
         details: 'Please try again later' 
-      }, { status: 503 })
+      })
     }
     
-    return NextResponse.json({ 
+    return res.status(500).json({ 
       error: 'Failed to generate speech',
       details: error.message?.substring(0, 100) || 'Unknown error' 
-    }, { status: 500 })
+    })
   }
 }

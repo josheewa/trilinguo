@@ -44,7 +44,11 @@ const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => 
     if (playing) {
       stopAudio(messageId)
     } else {
-      playAudio(message.content, currentLanguage.code, messageId)
+      // Extract text content for audio generation
+      const textContent = typeof message.content === 'string' 
+        ? message.content 
+        : message.content?.text || '';
+      playAudio(textContent, currentLanguage.code, messageId)
     }
   }
 
@@ -131,46 +135,56 @@ const MessageBubble = ({ message, ...props }) => {
   return <AssistantMessageBubble message={message} {...props} />
 }
 
-const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit, currentLanguage }) => (
-  <div className="flex w-full justify-end items-end mb-3">
-    <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-user text-gray-800 rounded-[20px_20px_4px_20px]">
-      <div>
-        <p className={`user-message-text text-gray-800 ${getLanguageTextClass(currentLanguage.code)}`}>
-          {message.content}
-        </p>
-        {/* Retry button for user messages with no response (but not while loading) */}
-        {index === messages.length - 1 && !uiState.isLoading && (
-          <div className="mt-2 pt-2 border-t border-blue-600">
-            <button
-              onClick={() => handleSubmit(null, index)}
-              disabled={uiState.retryingMessageIndex === index}
-              className="inline-flex items-center text-xs text-blue-700 transition-colors cursor-pointer"
-            >
-              {uiState.retryingMessageIndex === index ? (
-                <>
-                  <div className="animate-spin rounded-full h-3 w-3 border-b border-blue-700 mr-2"></div>
-                  Sending...
-                </>
-              ) : (
-                <>
-                  <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                    ></path>
-                  </svg>
-                  Retry sending
-                </>
-              )}
-            </button>
-          </div>
-        )}
+const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit, currentLanguage }) => {
+  // Handle both string and object content types
+  const messageText = typeof message.content === 'string' 
+    ? message.content 
+    : message.content?.text || '';
+
+  return (
+    <div className="flex w-full justify-end items-end mb-3">
+      <div className="max-w-[80%] sm:max-w-xs lg:max-w-md px-4 py-3 relative glass-bubble-user text-gray-800 rounded-[20px_20px_4px_20px]">
+        <div>
+          <p className={`user-message-text text-gray-800 ${getLanguageTextClass(currentLanguage.code)}`}>
+            {messageText}
+          </p>
+          {/* Retry button for user messages with no response (but not while loading) */}
+          {!uiState.isLoading && (
+            // Check if this user message doesn't have a following assistant response
+            (!messages[index + 1] || messages[index + 1].role === 'user') && (
+              <div className="mt-2 pt-2 border-t border-blue-600">
+                <button
+                  onClick={() => handleSubmit(null, index)}
+                  disabled={uiState.retryingMessageIndex === index}
+                  className="inline-flex items-center text-xs text-blue-700 transition-colors cursor-pointer"
+                >
+                  {uiState.retryingMessageIndex === index ? (
+                    <>
+                      <div className="animate-spin rounded-full h-3 w-3 border-b border-blue-700 mr-2"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        ></path>
+                      </svg>
+                      Retry sending
+                    </>
+                  )}
+                </button>
+              </div>
+            )
+          )}
+        </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, showRomanization, showEnglish, handleSubmit, updateUiState, audioControls }) => (
   <div className="flex w-full justify-start items-end mb-3">
@@ -195,11 +209,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
           )}
         </div>
 
-        {message.isError ? (
-          <div className="text-red-600 text-sm">
-            {message.content || 'Sorry, something went wrong. Please try again.'}
-          </div>
-        ) : (
+        {(
           <>
             {/* Character display */}
             {message.content.characters && Array.isArray(message.content.characters) && (
@@ -238,39 +248,7 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
               </div>
             )}
 
-            {message.isError && (
-              <div className="flex items-center gap-2 pt-2">
-                <button
-                  onClick={() => handleSubmit(null, index - 1)} // Retry the previous user message
-                  disabled={uiState.retryingMessageIndex === index - 1}
-                  className="glass-error inline-flex items-center px-3 py-1.5 text-xs text-white rounded-lg transition-colors cursor-pointer disabled:opacity-50"
-                >
-                  {uiState.retryingMessageIndex === index - 1 ? (
-                    <>
-                      <div className="animate-spin rounded-full h-3 w-3 border-b border-white mr-2"></div>
-                      Retrying...
-                    </>
-                  ) : (
-                    <>
-                      <svg
-                        className="w-3 h-3 mr-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                        ></path>
-                      </svg>
-                      Retry
-                    </>
-                  )}
-                </button>
-              </div>
-            )}
+
 
             {/* English translation */}
             {showEnglish && message.content.english && (
@@ -280,10 +258,10 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
             )}
 
             {/* Cultural context button */}
-            {message.content.cultural_context && (
+            {message.content.culturalContext && (
               <div className="mt-2 pt-2 border-t border-gray-300">
                 <button
-                  onClick={() => updateUiState({ culturalContextModal: message.content.cultural_context })}
+                  onClick={() => updateUiState({ culturalContextModal: message.content.culturalContext })}
                   className="inline-flex items-center text-xs text-amber-600 transition-colors cursor-pointer"
                 >
                   <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">

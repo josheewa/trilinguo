@@ -332,7 +332,7 @@ export default function Home() {
         .filter((msg) => msg.role === 'user' || !msg.isError)
         .map((msg) => ({
           role: msg.role,
-          content: parseMessageContent(msg, currentLanguage.name),
+          content: msg.role === 'user' ? msg.content : parseMessageContent(msg, currentLanguage.name),
         }))
     } else {
       userMessage = messageContent || input
@@ -341,7 +341,7 @@ export default function Home() {
         .filter((msg) => !msg.isError)
         .map((msg) => ({
           role: msg.role,
-          content: parseMessageContent(msg, currentLanguage.name),
+          content: msg.role === 'user' ? msg.content : parseMessageContent(msg, currentLanguage.name),
         }))
 
       newMessages = [...messages, { role: 'user', content: userMessage }]
@@ -356,11 +356,7 @@ export default function Home() {
 
     updateUiState({ isLoading: true })
     
-    const createErrorMessage = (text) => ({
-      role: 'assistant',
-      content: { text, english: text },
-      isError: true,
-    })
+
 
     try {
       const response = await fetch('/api/chat', {
@@ -376,27 +372,17 @@ export default function Home() {
 
       if (data.error) {
         console.error('API Error:', data.error)
-        setMessages([
-          ...newMessages,
-          createErrorMessage('Sorry, there was an error processing your message. Please try again.'),
-        ])
+        // Don't add error message to chat, just keep the user message with retry option
+        // The retry button will be shown on the user message
       } else if (data.output) {
         setMessages([...newMessages, { role: 'assistant', content: data.output }])
       } else {
         console.error('Unexpected API response format:', data)
-        setMessages([
-          ...newMessages,
-          createErrorMessage('Received an unexpected response format. Please try again.'),
-        ])
+        // Don't add error message to chat, just keep the user message with retry option
       }
     } catch (error) {
       console.error('Error sending message:', error)
-      setMessages([
-        ...newMessages,
-        createErrorMessage(
-          'Sorry, I encountered an error. Please check your connection and try again.',
-        ),
-      ])
+      // Don't add error message to chat, just keep the user message with retry option
     }
 
     updateUiState({ isLoading: false, retryingMessageIndex: null })
@@ -424,7 +410,6 @@ export default function Home() {
         
         <SignIn 
           routing="hash"
-          hideDevelopmentModeMessage={true}
           appearance={{
             elements: {
               formButtonPrimary: 'glass-button-primary text-white rounded-xl font-medium',

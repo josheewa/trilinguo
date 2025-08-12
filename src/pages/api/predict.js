@@ -1,41 +1,41 @@
 import OpenAI from 'openai'
-import { NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { getAuth } from '@clerk/nextjs/server'
 
 const client = new OpenAI()
-export const runtime = 'edge'
 
-const LANGUAGES = {
-  'zh-tw': 'Traditional Chinese',
-  'zh-cn': 'Simplified Chinese',
-  'ja': 'Japanese',
-  'ko': 'Korean',
-  'fr': 'French',
-}
-
-export default async function POST(req) {
+export default async function handler(req, res) {
   try {
+    if (req.method !== 'POST') {
+      res.setHeader('Allow', ['POST'])
+      return res.status(405).json({ suggestions: [] })
+    }
+
     // Check authentication
-    const { userId } = await auth()
+    const { userId } = getAuth(req)
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return res.status(401).json({ suggestions: [] })
     }
 
-    const { input, language = 'zh-tw', context = [], count = 3 } = await req.json()
+    const { input, language = 'zh-tw', context = [], count = 3 } = req.body || {}
 
-    // Only predict for inputs with 2+ characters and less than 80 characters
     if (!input || input.length < 2 || input.length > 80) {
-      return NextResponse.json({ suggestions: [] })
+      return res.status(200).json({ suggestions: [] })
     }
 
-    // Stop predictions if input ends with sentence-ending punctuation
     if (/[.!?。！？]$/.test(input.trim())) {
-      return NextResponse.json({ suggestions: [] })
+      return res.status(200).json({ suggestions: [] })
+    }
+
+    const LANGUAGES = {
+      'zh-tw': 'Traditional Chinese',
+      'zh-cn': 'Simplified Chinese',
+      ja: 'Japanese',
+      ko: 'Korean',
+      fr: 'French',
     }
 
     const languageName = LANGUAGES[language] || 'the target language'
 
-    // Create context from recent messages if available
     const contextString =
       context.length > 0
         ? `This is the recent conversation history for context:
@@ -93,7 +93,7 @@ Rules:
       ],
       max_tokens: 200,
       temperature: 0.3,
-      response_format: { type: 'json_object' }, // Using JSON mode for reliability
+      response_format: { type: 'json_object' },
     })
 
     const assistantOutput = response.choices[0].message.content
@@ -118,17 +118,16 @@ Rules:
         
         const uniqueSuggestions = [...new Set(filteredSuggestions)]
         
-        return NextResponse.json({ suggestions: uniqueSuggestions })
+        return res.status(200).json({ suggestions: uniqueSuggestions })
       }
     } catch (parseError) {
       console.error('Predict API JSON parse error:', parseError, 'Raw output:', assistantOutput)
-      return NextResponse.json({ suggestions: [] })
+      return res.status(200).json({ suggestions: [] })
     }
 
-    return NextResponse.json({ suggestions: [] })
+    return res.status(200).json({ suggestions: [] })
   } catch (error) {
     console.error('Predict API Error:', error)
-    // Don't expose internal errors to the client
-    return NextResponse.json({ suggestions: [] })
+    return res.status(200).json({ suggestions: [] })
   }
 } 

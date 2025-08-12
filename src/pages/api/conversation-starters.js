@@ -1,18 +1,14 @@
 import OpenAI from 'openai'
-import { NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { getAuth } from '@clerk/nextjs/server'
 import { z } from 'zod'
 import { zodResponseFormat } from 'openai/helpers/zod'
 
 const client = new OpenAI()
-export const runtime = 'edge'
 
-// Response schema for conversation starters
 const StartersResponseSchema = z.object({
-  starters: z.array(z.string()),
+  starters: z.array(z.string())
 })
 
-// Personality-based starter generation prompts
 const STARTER_GENERATION_PROMPTS = {
   'zh-tw': {
     personality: 'You are 小美 (Xiǎo Měi), an energetic 22-year-old Taiwanese university student from Taipei.',
@@ -41,7 +37,6 @@ const STARTER_GENERATION_PROMPTS = {
   }
 }
 
-// Translation-focused fallback starters
 const getTranslationFocusedFallbacks = (count) => {
   const fallbacks = [
     "How do I say 'hello'?",
@@ -52,15 +47,20 @@ const getTranslationFocusedFallbacks = (count) => {
   return fallbacks.slice(0, count)
 }
 
-export default async function POST(req, res) {
+export default async function handler(req, res) {
   try {
-    // Check authentication
-    const { userId } = await auth()
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (req.method !== 'POST') {
+      res.setHeader('Allow', ['POST'])
+      return res.status(405).json({ error: 'Method Not Allowed' })
     }
 
-    const { language = 'zh-tw', count = 4 } = await req.json()
+    // Check authentication
+    const { userId } = getAuth(req)
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' })
+    }
+
+    const { language = 'zh-tw', count = 4 } = req.body || {}
     
     const config = STARTER_GENERATION_PROMPTS[language] || STARTER_GENERATION_PROMPTS['zh-tw']
     const responseFormat = zodResponseFormat(StartersResponseSchema, 'starters')
@@ -80,7 +80,6 @@ Generate ${count} conversation starters for language learners. Include a good mi
 - Focus on practical, everyday words and phrases that beginners need
 - Include some pronunciation questions like "How do you pronounce [word]?"
 - Make translation requests specific and useful
-- Keep conversation starters culturally relevant and engaging
 
 ${config.examples}
 
@@ -106,17 +105,13 @@ Return exactly ${count} starters in the required JSON format.`
         .filter(starter => starter && typeof starter === 'string' && starter.length > 0)
         .slice(0, count)
         
-      return NextResponse.json({ starters: validStarters })
+      return res.status(200).json({ starters: validStarters })
     }
     
-    // Fallback if parsing fails
-    return NextResponse.json({ starters: [] })
+    return res.status(200).json({ starters: [] })
     
   } catch (error) {
     console.error('Conversation Starters API Error:', error)
-    
-    return NextResponse.json({ 
-      starters: getTranslationFocusedFallbacks(4) 
-    })
+    return res.status(200).json({ starters: getTranslationFocusedFallbacks(4) })
   }
 } 
