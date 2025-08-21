@@ -1,36 +1,58 @@
 # Trilinguo
 
-A trilingual chat application that helps users practice Chinese through AI conversations. Features Chinese characters with pinyin pronunciation guides and English translations.
+A language practice chat app with AI-powered conversations. Supports character-by-character romanization, English translations, and cultural context across Chinese (Traditional/Simplified), Japanese, Korean, and French.
 
 ## Features
 
-- AI-powered Chinese conversation practice
-- Pinyin pronunciation guides
-- English translations
-- Responsive design
-- Secure authentication with Clerk
-- Multi-language support (Chinese, Japanese, Korean, French)
+- AI chat tuned for language learning
+- Optional pinyin/romaji display per language
+- English translation and cultural context
+- Responsive UI (Tailwind) with local-only chat storage
+- Secure auth via Clerk (middleware + server checks)
 
-## Getting Started
+## Quick start
+
+1) Create `.env.local` (see variables below)
+2) Install and run the dev server:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to access the app.
+Open `http://localhost:3000`.
+
+## Environment variables
+
+Create `.env.local` in the project root:
+
+```env
+# Clerk
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
+CLERK_SECRET_KEY=sk_test_xxx
+
+# OpenAI
+OPENAI_API_KEY=sk-openai-xxx
+```
+
+- Clerk keys are available in the Clerk dashboard.
+- `OPENAI_API_KEY` is required by the server-only API routes that call OpenAI.
+- Do not commit secrets. `.gitignore` already ignores `.env*` files.
 
 ## Authentication
 
-This app uses [Clerk](https://clerk.com) for secure user authentication. Users can sign up and sign in using email or social providers.
+- Clerk middleware protects pages and API routes: see `middleware.ts`.
+- API routes also verify auth server-side with `getAuth` and return `401` if missing.
 
-## Environment Variables
+## Tech stack
 
-Make sure to set up your Clerk environment variables in your `.env.local` file:
+- Next.js 15, React 19
+- Clerk for auth
+- OpenAI SDK for chat and TTS
+- Tailwind CSS 4
 
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_publishable_key
-CLERK_SECRET_KEY=your_secret_key
-```
+## Production notes
 
-You can get these keys from your [Clerk Dashboard](https://dashboard.clerk.com).
+- Ensure `OPENAI_API_KEY`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, and `CLERK_SECRET_KEY` are set in the hosting environment.
+- Keep `.env*` files out of version control (already covered by `.gitignore`).
+- No OpenAI keys are exposed client-side; all calls happen via server API routes.

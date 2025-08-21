@@ -11,7 +11,7 @@ const VOICE_MAP = {
   'fr': 'echo', 
 }
 
-// Extract text content from message for TTS
+/** Extract text content from a structured message for TTS generation. */
 const extractTextForTTS = (messageContent, language) => {
   if (!messageContent) return ''
   
@@ -26,6 +26,10 @@ const extractTextForTTS = (messageContent, language) => {
   return ''
 }
 
+/**
+ * POST /api/tts
+ * Auth required. Generates MP3 audio for model output text.
+ */
 export default async function handler(req, res) {
   try {
     if (req.method !== 'POST') {

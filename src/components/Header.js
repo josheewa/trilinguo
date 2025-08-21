@@ -1,7 +1,9 @@
 import React from 'react'
+import Image from 'next/image'
 import { useUser, useAuth } from '@clerk/nextjs'
 import { LANGUAGES } from '../config/languages'
 
+/** App header with language switcher, toggles, clear, and account menu. */
 export default function Header({
   currentLanguage,
   showRomanization,
@@ -25,7 +27,7 @@ export default function Header({
     <>
     <header className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 glass-nav z-10">
       <div className="flex items-center space-x-3 sm:space-x-4">
-        <img src="/favicon.svg" alt="Trilinguo Logo" className="w-8 h-8 glass-logo rounded-lg" />
+        <Image src="/favicon.svg" alt="Trilinguo Logo" width={32} height={32} className="glass-logo rounded-lg border-none" />
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">Trilinguo</h1>
 
         {/* Language Dropdown - Desktop */}
@@ -146,7 +148,7 @@ export default function Header({
 
     </header>
 
-    {/* Dropdown rendered outside header to prevent layout interference */}
+    {/* Dropdown rendered outside header */}
     {uiState.showLanguageDropdown && languageDropdownRef.current && (
       <div 
         className="fixed w-64 glass-dropdown-fixed z-50"

@@ -1,5 +1,6 @@
 import React from 'react'
 
+/** Landing screen with suggested prompts per language. */
 export default function WelcomeScreen({
   currentLanguage,
   loadingStarters,

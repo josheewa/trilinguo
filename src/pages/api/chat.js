@@ -5,7 +5,7 @@ import { getAuth } from '@clerk/nextjs/server'
 
 const client = new OpenAI()
 
-// Language-specific response schemas
+/** Language-specific response schemas */
 const ChineseResponseSchema = z.object({
   characters: z.array(z.object({
     text: z.string(),
@@ -39,7 +39,7 @@ const FrenchResponseSchema = z.object({
   culturalContext: z.string().nullable(),
 })
 
-// Flexible schema that supports both standard and English-only responses
+/** Flexible schema supporting standard and English-only responses. */
 const FlexibleResponseSchema = (languageCode) => {
   const characterSchema = z.object({
     text: z.string(),
@@ -74,7 +74,7 @@ const FlexibleResponseSchema = (languageCode) => {
   }
 }
 
-// Language configurations for prompts
+/** Language configurations used to parameterize system prompts. */
 const LANGUAGE_CONFIGS = {
   'zh-tw': {
     languageName: 'Traditional Chinese',
@@ -113,7 +113,7 @@ const LANGUAGE_CONFIGS = {
   }
 }
 
-// Generate parameterized system prompt
+/** Generate a system prompt using the language config and selected personality. */
 const createSystemPrompt = (languageCode, personality) => {
   const config = LANGUAGE_CONFIGS[languageCode]
   const hasRomanization = config.romanizationName !== null
@@ -202,6 +202,10 @@ GENERAL RULES:
 `
 }
 
+/**
+ * POST /api/chat
+ * Auth required. Proxies chat messages to OpenAI and returns a validated JSON payload.
+ */
 export default async function handler(req, res) {
   try {
     if (req.method !== 'POST') {

@@ -3,6 +3,10 @@ import { getAuth } from '@clerk/nextjs/server'
 
 const client = new OpenAI()
 
+/**
+ * POST /api/predict
+ * Auth required. Generates autocomplete suggestions for the current input.
+ */
 export default async function handler(req, res) {
   try {
     if (req.method !== 'POST') {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAudioCache } from '../lib/useAudioCache'
 
-// Helper function to get language-specific text class
+/** Map language code to appropriate text class. */
 const getLanguageTextClass = (languageCode) => {
   switch (languageCode) {
     case 'zh-tw':
@@ -16,24 +16,24 @@ const getLanguageTextClass = (languageCode) => {
   }
 }
 
-// Helper function to determine if character should show romanization
-// Only show for actual language characters, not punctuation or English
+/** Determine if romanization should be shown for a character. */
 const shouldShowRomanization = (text, languageCode) => {
   if (!text || !text.trim()) return false
   
   // Language-specific regex for characters that typically have romanization
   const regexMap = {
-    'zh-tw': /[\u4e00-\u9fff]/,  // Chinese characters
-    'zh-cn': /[\u4e00-\u9fff]/,   // Chinese characters
+    'zh-tw': /[\u4e00-\u9fff]/,  // Chinese
+    'zh-cn': /[\u4e00-\u9fff]/,   // Chinese
     'ja': /[\u3040-\u30ff\u4e00-\u9faf]/,  // Hiragana, Katakana, Kanji
     'ko': /[\uac00-\ud7af]/,      // Hangul syllables
-    'fr': /.*/                    // French doesn't use romanization
+    'fr': /.*/
   }
   
   const regex = regexMap[languageCode] || /.*/
   return regex.test(text)
 }
 
+/** Play/stop TTS audio for a message with per-message state. */
 const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => {
   const { playAudio, stopAudio, isLoading, isPlaying, getError } = audioControls
   const loading = isLoading(messageId)
@@ -53,7 +53,6 @@ const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => 
   }
 
   const handleKeyDown = (e) => {
-    // Support Enter and Space keys for activation
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       handleClick()
@@ -115,7 +114,6 @@ const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => 
           <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.775L6.416 15H4a1 1 0 01-1-1V6a1 1 0 011-1h2.416l1.967-1.776a1 1 0 011.617.776zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.983 5.983 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.984 3.984 0 00-1.172-2.828 1 1 0 010-1.415z" clipRule="evenodd" />
         </svg>
       )}
-      {/* Hidden status for screen readers */}
       <span 
         id={`audio-status-${messageId}`}
         className="sr-only"
@@ -135,6 +133,7 @@ const MessageBubble = ({ message, ...props }) => {
   return <AssistantMessageBubble message={message} {...props} />
 }
 
+/** User bubble showing the original message with a retry affordance. */
 const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit, currentLanguage }) => {
   // Handle both string and object content types
   const messageText = typeof message.content === 'string' 
@@ -148,9 +147,7 @@ const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit, cu
           <p className={`user-message-text text-gray-800 ${getLanguageTextClass(currentLanguage.code)}`}>
             {messageText}
           </p>
-          {/* Retry button for user messages with no response (but not while loading) */}
           {!uiState.isLoading && (
-            // Check if this user message doesn't have a following assistant response
             (!messages[index + 1] || messages[index + 1].role === 'user') && (
               <div className="mt-2 pt-2 border-t border-blue-600">
                 <button
@@ -186,6 +183,7 @@ const UserMessageBubble = ({ message, index, messages, uiState, handleSubmit, cu
   )
 }
 
+/** Assistant bubble with optional character breakdown, romanization, EN translation, and TTS. */
 const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, showRomanization, showEnglish, handleSubmit, updateUiState, audioControls }) => (
   <div className="flex w-full justify-start items-end mb-3">
     <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${currentLanguage.personality.color} flex items-center justify-center mr-2 mb-1 glass-surface`}>
@@ -195,7 +193,6 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
       <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
           <div className="text-xs text-gray-700 font-medium">{currentLanguage.personality.name}</div>
-          {/* Audio button - only show for non-error messages with non-English content */}
           {!message.isError && message.content && (
             (message.content.characters && Array.isArray(message.content.characters) && message.content.characters.length > 0) ||
             (message.content.text && message.content.english !== null)
@@ -211,7 +208,6 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
 
         {(
           <>
-            {/* Character display */}
             {message.content.characters && Array.isArray(message.content.characters) && (
               <div className="character-display message-content">
                 {message.content.characters.map((obj, i) => (
@@ -236,7 +232,6 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
               </div>
             )}
 
-            {/* Text display (for languages without character breakdown) */}
             {message.content.text && !message.content.characters && (
               <div className="message-content">
                 <p className={`text-gray-800 ${getLanguageTextClass(currentLanguage.code)}`}>
@@ -250,14 +245,12 @@ const AssistantMessageBubble = ({ message, index, uiState, currentLanguage, show
 
 
 
-            {/* English translation */}
             {showEnglish && message.content.english && (
               <div className="mt-2 pt-2 border-t border-gray-300">
                 <p className="text-sm text-gray-600 italic">{message.content.english}</p>
               </div>
             )}
 
-            {/* Cultural context button */}
             {message.content.culturalContext && (
               <div className="mt-2 pt-2 border-t border-gray-300">
                 <button

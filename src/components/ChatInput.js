@@ -1,5 +1,6 @@
 import React from 'react'
 
+/** Chat input with predictive suggestions */
 export default function ChatInput({
   settings,
   suggestions,
@@ -11,13 +12,11 @@ export default function ChatInput({
 }) {
   return (
     <div className="flex-shrink-0 relative z-10 max-w-4xl mx-auto w-full px-4 pt-4 pb-2">
-      {/* Predictive Text Suggestions */}
       {settings.enablePredictiveText &&
         suggestions.length > 0 &&
         input.length > 0 && (
           <div className="mb-3 flex flex-wrap gap-2">
             {suggestions.map((suggestion, index) => {
-              // Ensure suggestion still starts with the current input before rendering
               if (!suggestion.toLowerCase().startsWith(input.toLowerCase())) {
                 return null
               }
@@ -57,7 +56,6 @@ export default function ChatInput({
               value={input}
               onChange={(e) => {
                 setInput(e.target.value)
-                // Auto-resize functionality
                 const textarea = e.target
                 textarea.style.height = 'auto'
                 const newHeight = Math.min(textarea.scrollHeight, 240) // ~10 lines max

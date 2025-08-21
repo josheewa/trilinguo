@@ -47,6 +47,10 @@ const getTranslationFocusedFallbacks = (count) => {
   return fallbacks.slice(0, count)
 }
 
+/**
+ * POST /api/conversation-starters
+ * Auth required. Produces a short list of prompt ideas for the selected language.
+ */
 export default async function handler(req, res) {
   try {
     if (req.method !== 'POST') {

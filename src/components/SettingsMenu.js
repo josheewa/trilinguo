@@ -2,6 +2,7 @@ import React from 'react'
 import { useUser, useAuth } from '@clerk/nextjs'
 import { LANGUAGES } from '../config/languages'
 
+/** Slide-in settings panel with language selection and basic toggles. */
 export default function SettingsMenu({
   uiState,
   updateUiState,
@@ -130,7 +131,7 @@ export default function SettingsMenu({
               </button>
             </label>
 
-            {/* Romanization Toggle - only show if current language supports it */}
+            {/* Romanization Toggle */}
             {currentLanguage.hasRomanization && (
               <label className="glass-surface-subtle flex items-center justify-between rounded-lg p-3 cursor-pointer">
                 <span className="text-sm text-gray-700 font-medium">Show {currentLanguage.romanizationLabel}</span>
