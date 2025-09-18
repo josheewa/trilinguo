@@ -67,8 +67,8 @@ const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => 
   }
 
   const getButtonClass = () => {
-    if (error) return "glass-button text-red-600 p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
-    return "glass-button text-gray-700 p-1.5 rounded-lg transition-colors disabled:opacity-50 relative z-10 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
+    if (error) return "inline-flex items-center justify-center text-red-600 hover:text-red-700 disabled:opacity-50 focus:outline-none"
+    return "inline-flex items-center justify-center text-gray-600 hover:text-gray-800 disabled:opacity-50 focus:outline-none"
   }
 
   const getAriaLabel = () => {
@@ -100,7 +100,7 @@ const AudioButton = ({ message, messageId, currentLanguage, audioControls }) => 
       tabIndex={0}
     >
       {loading ? (
-        <div className="animate-spin rounded-full h-4 w-4 border-b border-gray-700"></div>
+        <div className="animate-spin rounded-full h-4 w-4 border-b border-current"></div>
       ) : error ? (
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />

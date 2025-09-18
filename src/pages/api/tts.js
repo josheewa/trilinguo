@@ -11,18 +11,25 @@ const VOICE_MAP = {
   'fr': 'echo', 
 }
 
-/** Extract text content from a structured message for TTS generation. */
+/** Extract text content from the incoming message for TTS generation. */
 const extractTextForTTS = (messageContent, language) => {
   if (!messageContent) return ''
-  
+
+  // Plain string content
+  if (typeof messageContent === 'string') {
+    return messageContent
+  }
+
+  // Structured assistant content with characters array
   if (messageContent.characters && Array.isArray(messageContent.characters)) {
     return messageContent.characters.map(char => char.text).join('')
   }
-  
+
+  // Generic object with text field
   if (messageContent.text) {
     return messageContent.text
   }
-  
+
   return ''
 }
 

@@ -66,13 +66,23 @@ export const useAudioCache = () => {
     setLoading(messageId, true)
 
     try {
+      // Normalize and validate input text before making the request
+      const text = typeof messageContent === 'string' 
+        ? messageContent 
+        : (messageContent?.text || (Array.isArray(messageContent?.characters) ? messageContent.characters.map(c => c.text).join('') : ''))
+
+      if (!text || !text.trim()) {
+        throw new Error('Nothing to read aloud')
+      }
+
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messageContent,
+          // Send a plain string to simplify server parsing
+          messageContent: text,
           language,
         }),
       })
